@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+
+<!-- Curso formato-curso v5 — página única (trilha + 6 aulas como views, roteamento por hash). Motor: assets/curso.js. -->
+<html data-theme="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="iadozero-v5" name="curso"/>
+<title>IA desde cero · INEMA.CLUB PRO</title>
+<meta content="Los primeros pedidos para quienes nunca usaron IA, con el porqué de cada uno. Curso de 4 clases cortas, sin nada técnico, que termina con tu propio kit de cinco pedidos." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&amp;family=Inter:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="../assets/aula.css" rel="stylesheet"/>
+<script>(function(){try{var m=document.querySelector('meta[name=curso]');var CK=(m&&m.content)||'v5:curso';var s=JSON.parse(localStorage.getItem(CK));if(s&&s.prefs&&s.prefs.theme)document.documentElement.setAttribute('data-theme',s.prefs.theme);}catch(e){}})();</script>
+<!--
+  PROTOCOLO DE DESCOBERTA (formato-curso-v5, Passo 0 — registrado 2026-09-07; público e profissões confirmados pelo usuário
+  ao aprovar o kit ia-do-zero + este curso na mesma sessão):
+  - Público específico: pessoas 40+ que nunca usaram IA no trabalho, ou usaram uma ou duas vezes e desistiram; usam
+    WhatsApp, e-mail e planilha; sabem abrir um site e copiar/colar.
+  - Profissões-alvo (≥2): gestora de RH (Marta) · dona de clínica de fisioterapia (Beatriz) · coordenador de marketing de
+    uma rede de lojas (Paulo) · gerente de atendimento ao cliente (Renata) — as mesmas personagens do kit, no primeiro dia com IA.
+  - Familiaridade com tecnologia: nenhuma com IA. Sem código, sem terminal, sem nenhum programa novo.
+  - Resultado prático esperado: sair com o próprio kit de cinco pedidos preenchidos com o seu contexto, guardado num
+    arquivo e testado, e com a rotina pedir → ajustar → conferir.
+  - Tempo por sessão: 15–20 minutos por aula.
+  Fonte do conteúdo: o kit "IA do Zero" (https://inematds.github.io/ia-do-zero/guia/), 20 pedidos por situação + 10 dicas.
+  Auditoria anti-clone (contra agi-ready, 2026-09-07, e pffia, 2026-09-06): 4 aulas FUND·FERR·FUND·PRAT (agi-ready: 6,
+  FUND·FUND·FERR·FUND·FUND·PRAT); práticas prompt·prompt·tarefa·tarefa (agi-ready: tarefa·analise·prompt·tarefa·tarefa·prompt);
+  mesmas personagens em situações novas (primeiro dia com IA, sem agentes); metáforas novas (bilhete de encomenda da padaria,
+  controle remoto com quatro botões, óculos e lupa sobre o recibo, caixinha de fichas de receita).
+-->
+<style>
+  .view{display:none}.view.active{display:block}
+  /* bloco colável: quebra de linha no mobile, sem forçar a largura da coluna */
+  .layout .col{min-width:0}
+  .pcodewrap .pcode{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+  /* balão do glossário: fora do layout quando escondido (evita rolagem lateral no celular); no celular, ancora na borda mais próxima */
+  .gterm:not(:hover):not(:focus)::after{display:none}
+  html{overflow-x:clip}
+  @media(max-width:940px){.gterm::after{max-width:min(280px,calc(100vw - 48px))}}
+  .lnav{max-width:1160px;margin:0 auto 5vh;padding:0 clamp(24px,5vw,60px);display:flex;justify-content:space-between;gap:12px}
+  .lnav a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;border:1px solid var(--line2);border-radius:12px;padding:12px 16px}
+  .lnav a:hover{border-color:var(--accent);color:var(--ink)}
+  #v-trilha .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(24px,5vw,60px)}
+  #v-trilha .t-hero{position:relative;overflow:hidden;padding:20vh 0 8vh;border-bottom:1px solid var(--line)}
+  #v-trilha .t-hero::before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(55% 48% at 82% 18%,rgba(124,224,198,.13),transparent 60%),radial-gradient(40% 40% at 10% 90%,rgba(242,180,92,.08),transparent 60%)}
+  #v-trilha .t-hero .wrap{position:relative;z-index:1}
+  #v-trilha h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6.4vw,72px);line-height:1;letter-spacing:-.025em;margin:0 0 22px}
+  #v-trilha h1 em{font-style:italic;color:var(--accent)}
+  #v-trilha .lead{font-family:var(--serif);font-size:clamp(19px,2.1vw,24px);line-height:1.5;color:var(--ink-soft);max-width:46ch;margin:0 0 30px}
+  #v-trilha section{padding:8vh 0}
+  #v-trilha .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  #v-trilha h2{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(26px,3.6vw,38px);margin:0 0 28px}
+  #v-trilha .aulas{display:grid;gap:14px}
+  #v-trilha .au{display:grid;grid-template-columns:56px 1fr auto;gap:20px;align-items:center;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 24px}
+  #v-trilha .au:hover{border-color:var(--accent)}
+  #v-trilha .au .num{font-family:var(--serif);font-size:30px;color:var(--accent);text-align:center}
+  #v-trilha .au h3{font-family:var(--serif);font-weight:500;font-size:21px;margin:0 0 5px}
+  #v-trilha .au p{margin:0;color:var(--muted);font-size:14.5px}
+  #v-trilha .au .meta{font-family:var(--mono);font-size:11px;color:var(--accent);white-space:nowrap;text-align:right}
+  #v-trilha .au .prog{position:static;margin-top:10px;height:5px;border-radius:99px;background:var(--line);overflow:hidden;max-width:220px;width:auto}
+  #v-trilha .au .prog i{display:block;height:100%;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .5s}
+  #v-trilha .blocos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:6px}
+  #v-trilha .bloco{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:18px 20px}
+  #v-trilha .bloco .bk{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  #v-trilha .bloco p{margin:0;font-family:var(--serif);font-size:16px;line-height:1.5;color:var(--ink-soft)}
+  #v-trilha footer{max-width:1080px;margin:0 auto;padding:6vh clamp(24px,5vw,60px) 12vh;color:var(--faint);text-align:center;font-family:var(--serif);font-style:italic;border-top:1px solid var(--line)}
+  @media(max-width:720px){#v-trilha .au{grid-template-columns:44px 1fr}#v-trilha .au .meta{grid-column:2;text-align:left}}
+</style>
+<link href="https://inematds.github.io/ia-do-zero-curso/curso.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ia-do-zero-curso/en/curso.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ia-do-zero-curso/es/curso.html" hreflang="es" rel="alternate"/></head>
+<body><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../curso.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../en/curso.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="./curso.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<div class="bar"><div class="bar-inner">
+<span class="brand"><a class="mark" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a><a class="pro" href="https://inema.pro" rel="noopener" target="_blank">PRO</a><a class="course" href="landing.html">IA desde cero</a></span>
+<a class="back" href="#trilha" style="display:none">← ruta</a>
+<button class="pill" id="pill" style="display:none">0 leído</button>
+<button id="revbtn">revisar <span id="revn">0</span></button>
+<button id="exbtn">ejercicios</button>
+<button id="jorbtn">recorrido</button>
+<button aria-label="Cómo funciona" id="helpbtn">?</button>
+<button aria-label="Preferencias de lectura" id="prefsbtn">Aa</button>
+<button id="themebtn">tema: oscuro</button>
+</div></div>
+<!-- ===== TRILHA ===== -->
+<section class="view" id="v-trilha">
+<header class="t-hero"><div class="wrap">
+<p class="kicker">Ruta única · 4 clases</p>
+<h1>IA de <em>Cero</em></h1>
+<p class="lead">Termina con tu propio kit de cinco pedidos, completados con tu contexto, probados en un chat de IA y guardados para usar cada semana. Sin nada técnico, sin instalar ningún programa nuevo y a tu ritmo.</p>
+</div></header>
+<section><div class="wrap">
+<div class="statcards"></div>
+<p class="eyebrow">Clases</p>
+<h2>Del primer pedido a tu kit</h2>
+<div class="aulas">
+<a class="au on" data-aula="1" href="#aula-1">
+<div class="num">1</div>
+<div><h3>La IA responde a lo que dices, no a lo que quieres</h3><p>Termina escribiendo un pedido con las tres partes y viendo, lado a lado, la diferencia en la respuesta.</p><div class="prog"><i></i></div></div>
+<div class="meta">16 min · abrir →</div>
+</a>
+<a class="au on" data-aula="2" href="#aula-2">
+<div class="num">2</div>
+<div><h3>El chat en la práctica: cuatro cosas que importan</h3><p>Termina haciendo un pedido, solicitando tres versiones y ajustando el tono en la misma conversación, sin empezar de nuevo.</p><div class="prog"><i></i></div></div>
+<div class="meta">18 min · abrir →</div>
+</a>
+<a class="au on" data-aula="3" href="#aula-3">
+<div class="num">3</div>
+<div><h3>Confía, pero verifica</h3><p>Termina señalando los números, plazos y promesas en una respuesta de la IA, y compruébalos en cinco minutos, sin pegar datos reales de nadie.</p><div class="prog"><i></i></div></div>
+<div class="meta">18 min · abrir →</div>
+</a>
+<a class="au on" data-aula="4" href="#aula-4">
+<div class="num">4</div>
+<div><h3>Tu kit: cinco pedidos que son tuyos</h3><p>Termina con cinco pedidos completados con tu contexto, uno probado y el archivo guardado para la próxima semana.</p><div class="prog"><i></i></div></div>
+<div class="meta">20 min · abrir →</div>
+</a>
+</div>
+</div></section>
+<section><div class="wrap">
+<p class="eyebrow">El kit que acompaña el curso</p>
+<h2>Veinte pedidos listos, según la situación</h2>
+<div class="blocos">
+<div class="bloco"><p class="bk">A · Escribir</p><p>Correo difícil, mensaje para un cliente, comunicado, mejorar un borrador.</p></div>
+<div class="bloco"><p class="bk">B · Entender</p><p>Resumir un documento, explicar una cláusula, traducir algo técnico para el cliente.</p></div>
+<div class="bloco"><p class="bk">C · Organizar</p><p>Hoja de cálculo desde cero, semana a partir de una lista, agenda con una decisión.</p></div>
+<div class="bloco"><p class="bk">D · Decidir</p><p>Comparar opciones, hacer preguntas antes de decidir, verificar un número.</p></div>
+<div class="bloco"><p class="bk">E · Atender y vender</p><p>Queja, descripción de un servicio, publicación sobre una novedad.</p></div>
+<div class="bloco"><p class="bk">F · Pedir mejor</p><p>Hacer que la IA pregunte, aprender desde cero, tres versiones, corregir el tono. <a href="https://inematds.github.io/ia-do-zero/guia/" rel="noopener" style="color:var(--accent)" target="_blank">Abrir el kit →</a></p></div>
+</div>
+</div></section>
+<footer><div class="wrap">IA desde cero · INEMA.CLUB PRO · compañero del kit "IA desde cero"</div></footer>
+</section>
+<!-- ===== AULA 1 · FUNDAMENTO ===== -->
+<section class="view" data-aula="1" data-tempo="16min" id="v-aula-1">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Ruta única · Clase 1</p>
+<h1>La IA responde a lo que dices,<br/><em>no a lo que quieres</em></h1>
+<p class="promise">Al terminar esta clase podrás escribir un pedido con las tres partes (quién eres, el resultado que quieres y qué no puede pasar) y ver, lado a lado, la diferencia entre la respuesta a un pedido vago y a este.</p>
+<p class="why">Casi todos los que intentaron usar IA una vez y se dieron por vencidos hicieron lo mismo: escribieron cuatro palabras, recibieron un texto que parecía de un banco y concluyeron que "esto no sirve para mi trabajo". No era la IA. Era el pedido. Esta clase muestra las tres partes que faltaban, con ejemplos de quienes pasaron por eso, y termina con una comparación de las dos respuestas en tu propia pantalla.</p>
+<p class="cue"><span class="arw">↓</span> desplázate para estudiar</p>
+</div>
+<!-- herofig · registro METÁFORA-DO-MUNDO-REAL: o bilhete de encomenda preso com clipe no balcão da padaria — nome, o que é, quantas, para que hora. Bilhete completo vira o pão certo; "pão" vira qualquer pão. -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<ellipse cx="150" cy="216" fill="#000" opacity=".25" rx="118" ry="9"></ellipse>
+<rect fill="#1a1824" height="48" rx="6" stroke="#948DA6" stroke-width="2" width="244" x="28" y="160"></rect>
+<rect fill="#37324a" height="8" rx="3" width="244" x="28" y="160"></rect>
+<ellipse cx="228" cy="150" fill="#221f2e" rx="26" ry="12" stroke="#948DA6" stroke-width="2"></ellipse>
+<path d="M206 148 q22 -14 44 0" fill="none" stroke="#F2B45C" stroke-width="3"></path>
+<path d="M214 144 l4 -6 M226 140 l0 -7 M238 144 l-4 -6" stroke="#F2B45C" stroke-linecap="round" stroke-width="2"></path>
+<g transform="rotate(-5 120 100)">
+<rect fill="#ECE6D9" height="112" opacity=".95" rx="3" width="116" x="62" y="48"></rect>
+<rect fill="none" height="18" rx="6" stroke="#948DA6" stroke-width="3" width="24" x="108" y="38"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="9" opacity=".8" x="74" y="72">Nombre:</text>
+<path d="M104 70 h60" opacity=".55" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E0D14" font-family="monospace" font-size="9" opacity=".8" x="74" y="92">Qué:</text>
+<path d="M108 90 h56" opacity=".55" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E0D14" font-family="monospace" font-size="9" opacity=".8" x="74" y="112">¿Cuántos:</text>
+<path d="M118 110 h30" opacity=".55" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E0D14" font-family="monospace" font-size="9" opacity=".8" x="74" y="132">Para:</text>
+<path d="M100 130 h40" stroke="#7CE0C6" stroke-linecap="round" stroke-width="3"></path>
+<path d="M74 148 h70" opacity=".3" stroke="#0E0D14" stroke-dasharray="3 3" stroke-width="1.5"></path>
+</g>
+<path d="M232 60 l28 -4" stroke="#948DA6" stroke-linecap="round" stroke-width="5"></path>
+<path d="M258 56 l8 -1" stroke="#F2B45C" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="44" cy="70" fill="#7CE0C6" r="3"></circle><circle cx="36" cy="88" fill="#7CE0C6" opacity=".6" r="2"></circle>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> La IA no sabe quién eres</h2>
+<p>Cuando abres un <span class="gterm" data-def="O site ou aplicativo onde você escreve e a IA responde, como ChatGPT, Claude, Gemini ou Copilot. Funciona como uma conversa por mensagens." tabindex="0">chat de IA</span> por primera vez, la pantalla es un cuadro para escribir y nada más. Del otro lado no hay nadie que conozca tu empresa, tu cliente o tu forma de hablar. La IA ha leído una enorme cantidad de textos de todo el mundo, pero no ha leído nada sobre ti. Por eso responde a una persona genérica que no existe.</p>
+<p>Esto explica la primera decepción de casi cualquier principiante. Escribes "mensaje para paciente" y recibes un texto educado, largo y sin personalidad, que serviría para cualquier clínica del país. No es que la IA sea mala. Es que le pediste algo para cualquiera y te entregó algo para cualquiera. La primera parte de una buena solicitud es decir quién eres y para quién es la respuesta.</p>
+<!-- ex-prof --><p>Beatriz, dueña de una clínica de fisioterapia con seis profesionales, hizo exactamente eso en el primer intento. Pidió "un mensaje para recordar una cita" y recibió cuatro párrafos que empezaban con "Estimado paciente". En el segundo intento, escribió antes: "soy dueña de una clínica de fisioterapia de barrio, hablo con los pacientes por WhatsApp en un tono cercano, la mayoría tiene más de 50 años". El mensaje llegó en tres líneas y con el tono correcto. La IA era la misma. Lo que cambió fue lo que sabía sobre Beatriz.</p>
+<p>No tiene que ser largo. Una frase suele bastar: quién eres, qué haces y con quién hablas. Es la diferencia entre pedir un pan en el mostrador y dejar una nota de pedido con el nombre, la cantidad y la hora.</p>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="fundamento">
+<h2><span class="n">02</span> Di el resultado, no el camino</h2>
+<p>La segunda parte es la más importante y la que más gente olvida. Di qué quieres que pase después de usar la respuesta. "Escribe un correo electrónico amable" describe el camino. "Quiero que el proveedor acepte el plazo del viernes" describe el resultado. La IA hace mucho mejor lo segundo, porque así sabe adónde tiene que llevar el texto.</p>
+<p>Piensa en cómo delegas una tarea a una persona de confianza. No le dictas cada frase. Le dices qué debe pasar y dejas que elija las palabras. Con la IA es igual. Cuando describes el camino, ella sigue ese camino y el resultado queda al azar. Cuando describes el resultado, ella elige el camino para llegar hasta allí.</p>
+<!-- ex-prof --><p>Marta, gerente de RR. HH. de una fábrica de envases con 120 empleados, necesitaba avisar que las solicitudes de vacaciones empezarían a hacerse por el sistema y no por correo electrónico. La primera vez pidió "un comunicado sobre vacaciones". Recibió un texto genérico, lo reescribió, volvió a pedirlo, ajustó el tono y lo recortó. Cuatro rondas, cuarenta minutos. La segunda vez describió el resultado: "quiero que cada empleado sepa qué cambia, por qué cambia y qué tiene que hacer antes del día 1, en un texto que quepa en la pantalla del celular". El comunicado quedó listo para aprobar en cinco minutos.</p>
+<div class="qbefore-after">
+<div class="qba-col qba-before"><p class="qba-lbl">Antes</p><p class="qba-txt">Marta pide "un comunicado sobre vacaciones". Lo lee, le parece frío, lo vuelve a pedir, agrega la fecha, lo vuelve a pedir y lo reduce a la mitad. Cuatro rondas, cuarenta minutos, y aun así lo envía sin que le guste.</p></div>
+<div class="qba-col qba-depois"><p class="qba-lbl">Después</p><p class="qba-txt">Marta escribe quién es, qué resultado quiere y qué extensión necesita. Lee una vez, cambia una palabra y aprueba. Una ronda, cinco minutos.</p></div>
+<div class="qba-saldo"><b>Saldo:</b> de cuatro rondas a una, y de cuarenta minutos a cinco, con un texto más parecido al de ella que antes.</div>
+</div>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="fundamento">
+<h2><span class="n">03</span> Di lo que no puede pasar</h2>
+<p>La tercera parte es la más corta y la que más ahorra trabajo repetido. Di qué no puede tener la respuesta. "Sin emojis." "Sin empezar con estimados." "Sin prometer plazos." "Máximo ocho líneas." Cuando no recibe límites, la IA tiende a hacer más: más largo, más formal, más lleno de promesas. Lo que prohíbes es lo que evita la segunda ronda.</p>
+<p>Esto funciona porque la IA quiere agradar. Si no le indicas lo contrario, añade un "quedamos a tu disposición", inventa un plazo que suena bien y adorna con adjetivos. Nada de eso es un error suyo. Es lo que haría una persona si le pidieras "esmerate" sin decirle dónde parar. Los límites son tu manera de decirle dónde parar.</p>
+<!-- ex-prof --><p>Renata, gerente de atención al cliente de una empresa que vende un sistema de gestión para 800 pequeñas empresas, aprendió esto por las malas. Pidió una respuesta para un cliente que se quejaba de un error en el sistema, y la IA escribió "lo resolveremos para mañana". Nadie había prometido que estaría listo para mañana. Casi lo envía. Hoy todos sus pedidos terminan con la misma línea: "no prometas un plazo ni una devolución que yo no haya indicado". Desde entonces, ninguna respuesta ha incluido un compromiso que ella no pudiera cumplir.</p>
+<p>Las tres partes juntas caben en un pedido de cinco líneas: quién eres, el resultado que quieres y qué no puede pasar. Es un formulario de tres campos, y completas los tres cada vez. Después de una semana, lo haces de memoria.</p>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="fundamento">
+<h2><span class="n">04</span> La prueba de las tres partes</h2>
+<p>Antes de presionar enviar, vuelve a leer tu pedido y hazte tres preguntas. ¿Dice quién soy y para quién es? ¿Dice qué tiene que pasar? ¿Dice qué no puede pasar? Si falta una de las tres, la respuesta fallará justo en ese punto. No en otro. Esa es la prueba, y es más confiable que cualquier opinión sobre "si la IA es buena o mala".</p>
+<p>La prueba también sirve después, cuando la respuesta sale torcida. En lugar de concluir que "no funcionó", revisas el pedido y encuentras la parte que faltó. Casi siempre está ahí. Y, como verás en la próxima clase, puedes corregirlo sin empezar de nuevo: basta con agregar la parte que faltaba en la misma <span class="gterm" data-def="A sequência de mensagens que você troca com a IA numa mesma tela. Dentro dela, a IA lembra de tudo o que foi dito; numa conversa nova, começa do zero." tabindex="0">conversación</span>.</p>
+<p>Vale una observación honesta. Las tres partes no garantizan una respuesta perfecta a la primera. Garantizan una respuesta que puedes ajustar, porque sabes qué pediste y puedes señalar qué quedó fuera. Es diferente de una respuesta genérica, en la que no hay por dónde empezar. La primera la corriges con una frase. La segunda la descartas y empiezas de nuevo, y es ahí donde la mayoría se rinde.</p>
+<!-- ex-prof --><p>Paulo, coordinador de marketing de una cadena de cuatro tiendas de materiales de construcción, pidió "una publicación sobre la promoción de pinturas". Recibió un texto animado, lleno de signos de exclamación y dirigido a personas de 25 años. Los clientes de las tiendas tienen entre 40 y 65 años y, en su mayoría, son albañiles y propietarios de viviendas. Al releer el pedido, Paulo lo vio de inmediato: no decía para quién era. Agregó una línea: "quienes leen son clientes de 40 a 65 años, muchos profesionales de la construcción, tono directo y respetuoso", y la siguiente publicación salió con el tono adecuado.</p>
+<div class="qanchor"><p>La IA no adivina. Obedece lo que está escrito, incluso lo que falta.</p></div>
+<div class="quiz" data-answer="c">
+<p class="qk">Ponte a prueba</p><p class="q">Renata escribe: "Soy gerente de atención al cliente y necesito responderle a un cliente molesto por un retraso. Quiero que se sienta escuchado y acepte el nuevo plazo del jueves." La respuesta llega con "haremos un descuento en la próxima mensualidad". ¿Cuál de las tres partes faltó en su pedido?</p>
+<button class="opt" data-fb="Não. Ela disse quem é e com quem fala logo na primeira frase. Essa parte estava completa." data-k="a">Quién es y para quién es</button>
+<button class="opt" data-fb="Não. O resultado estava claro: cliente ouvido e novo prazo de quinta aceito. Foi essa clareza que fez o resto do texto sair bem." data-k="b">El resultado que ella quiere</button>
+<button além="" class="opt" data-fb="Isso. Ela não disse o que a resposta não podia ter. Sem o limite, a IA acrescentou um desconto que ninguém autorizou. Uma linha resolveria: " data-k="c" de="" desconto,="" devolução="" nem="" não="" ofereça="" prazo="" quinta"."="">Lo que no puede pasar</button>
+<p class="qfb"></p>
+</div>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="prompt" data-practice="p1">
+<p class="pk">Practica ahora <span class="pcount">0/4 hecho</span></p>
+<h3 class="ph">La misma solicitud, dos veces: mira la diferencia en tu pantalla</h3>
+<p class="pgoal">En unos 8 minutos, pegar en un chat de IA un pedido vago y luego el mismo pedido con las tres partes, y comparar las dos respuestas lado a lado.</p>
+<p class="psafe">Nada de esto sale de tu pantalla ni le llega a nadie. Usa un nombre inventado en lugar del cliente real. Si la respuesta parece extraña, no hay nada que corregir: simplemente borra la conversación y empieza otra.</p>
+<p>Lo siguiente es una solicitud lista para copiar y pegar, como una nota de pedido ya completada. Solo cambia lo que está entre &lt; &gt; por tus palabras; el resto queda igual.</p>
+<div class="pcodewrap"><button class="pcopy" type="button">copiar</button><pre class="pcode">PEDIDO 1 (vago, cole primeiro):
+Escreva um e-mail para um cliente sobre um atraso.
+
+PEDIDO 2 (com as três partes, cole depois, na mesma conversa):
+Sou &lt;sua profissão e o tipo de empresa, ex.: gerente de atendimento de uma empresa que vende sistema de gestão para pequenas empresas&gt;. Preciso responder a um cliente chamado &lt;nome inventado&gt; que reclamou de &lt;o que aconteceu, em uma frase&gt;. Quero que ele se sinta ouvido e aceite o novo prazo de &lt;dia&gt;. Escreva em até 8 linhas, tom &lt;cordial e direto&gt;, sem começar com "prezado", sem pedir desculpas mais de uma vez e sem prometer desconto, devolução ou prazo diferente do que eu escrevi.</pre></div>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> <span>Abre un chat de IA (ChatGPT, Claude, Gemini o Copilot; la versión gratuita sirve) y empieza una conversación nueva.</span></label></li>
+<li><label><input data-ptask="2" type="checkbox"/> <span>Pega solo el PEDIDO 1 y envíalo. Lee la respuesta una vez. Deberías ver un texto genérico, probablemente largo, con "estimado" y algún "quedamos a tu disposición".</span></label></li>
+<li><label><input data-ptask="3" type="checkbox"/> <span>Reemplaza las partes entre &lt; &gt; del PEDIDO 2 por las tuyas, pégalo en la misma conversación y envíalo. Deberías ver un texto de hasta 8 líneas, con tu tono, el plazo que escribiste y nada más.</span></label></li>
+<li><label><input data-ptask="4" type="checkbox"/> <span>Compara las dos. Anota en una frase cuál de las tres partes hizo más diferencia. Está listo cuando esa frase esté escrita.</span></label></li>
+</ol>
+<p class="pdone">Acabas de ver, en tu propia pantalla, que la diferencia no estaba en la IA: estaba en el pedido. Las tres partes que escribiste hoy sirven para todos los pedidos de aquí en adelante.</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; em cima, um pedido de quatro palavras recebe uma resposta genérica (cinza). Embaixo, o mesmo pedido com 'quem sou' recebe uma resposta que encaixa (verde). A IA é a mesma; o que muda é o que ela sabe sobre você." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<text fill="#948DA6" font-family="monospace" font-size="9" x="12" y="20">sin "quién soy"</text>
+<rect fill="#221f2e" height="26" rx="8" stroke="#948DA6" stroke-width="1.5" width="70" x="12" y="28"></rect>
+<path d="M22 41 h50" stroke="#ECE6D9" stroke-linecap="round" stroke-width="2"></path>
+<path d="M86 41 h22" marker-end="url(#a1)" stroke="#948DA6" stroke-width="1.5"></path>
+<rect fill="#1a1824" height="36" rx="8" stroke="#948DA6" stroke-dasharray="3 2" stroke-width="1.5" width="96" x="112" y="24"></rect>
+<path d="M122 34 h76 M122 42 h76 M122 50 h50" opacity=".6" stroke="#948DA6" stroke-width="1.5"></path>
+<text fill="#948DA6" font-family="monospace" font-size="9" x="12" y="104">con «quién soy»</text>
+<rect fill="#221f2e" height="52" rx="8" stroke="#7CE0C6" stroke-width="1.5" width="70" x="12" y="112"></rect>
+<path d="M22 124 h50 M22 134 h36 M22 144 h50 M22 154 h30" stroke="#ECE6D9" stroke-linecap="round" stroke-width="2"></path>
+<path d="M86 138 h22" stroke="#7CE0C6" stroke-width="1.5"></path>
+<rect fill="#1a1824" height="32" rx="8" stroke="#7CE0C6" stroke-width="2" width="96" x="112" y="122"></rect>
+<path d="M122 134 h60 M122 144 h40" stroke="#7CE0C6" stroke-linecap="round" stroke-width="2"></path>
+<path d="M190 132 l4 4 l8 -8" fill="none" stroke="#7CE0C6" stroke-width="2"></path>
+<text fill="#6C6580" font-family="monospace" font-size="8" x="12" y="188">misma IA, solicitud diferente</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a seta de cima descreve o caminho, passo a passo, e chega perto do alvo por sorte. A seta de baixo descreve só o resultado (o alvo) e a IA escolhe o caminho: mais curto e no centro." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<text fill="#948DA6" font-family="monospace" font-size="9" x="12" y="20">"escribe un correo electrónico educado"</text>
+<path d="M14 48 l30 -14 l24 18 l28 -10 l26 14 l30 -8" fill="none" stroke="#948DA6" stroke-linecap="round" stroke-width="2"></path>
+<circle cx="44" cy="34" fill="#948DA6" r="3"></circle><circle cx="68" cy="52" fill="#948DA6" r="3"></circle><circle cx="96" cy="42" fill="#948DA6" r="3"></circle><circle cx="122" cy="56" fill="#948DA6" r="3"></circle>
+<circle cx="178" cy="46" r="14" stroke="#948DA6" stroke-width="1.5"></circle><circle cx="178" cy="46" r="5" stroke="#948DA6" stroke-width="1.5"></circle>
+<circle cx="152" cy="40" fill="#F2B45C" r="4"></circle>
+<text fill="#948DA6" font-family="monospace" font-size="9" x="12" y="112">"quiero que acepte el viernes"</text>
+<path d="M14 146 h140" stroke="#7CE0C6" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M148 140 l10 6 l-10 6" fill="none" stroke="#7CE0C6" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="178" cy="146" r="14" stroke="#7CE0C6" stroke-width="1.5"></circle><circle cx="178" cy="146" fill="#7CE0C6" r="5"></circle>
+<text fill="#6C6580" font-family="monospace" font-size="8" x="12" y="188">proceso (arriba) vs. resultado (abajo)</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; um pedido bom é um formulário de três campos. Os dois primeiros dizem o que a IA deve fazer; o terceiro, em âmbar, diz onde ela deve parar. Sem o terceiro, ela acrescenta o que ninguém pediu." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#1a1824" height="164" rx="10" stroke="#948DA6" stroke-width="1.5" width="180" x="20" y="18"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="9" x="32" y="44">1 · quién soy, para quién</text>
+<rect fill="#221f2e" height="22" rx="6" stroke="#7CE0C6" stroke-width="1.5" width="156" x="32" y="50"></rect>
+<path d="M40 61 h100" stroke="#ECE6D9" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#7CE0C6" font-family="monospace" font-size="9" x="32" y="94">2 · qué debe suceder</text>
+<rect fill="#221f2e" height="22" rx="6" stroke="#7CE0C6" stroke-width="1.5" width="156" x="32" y="100"></rect>
+<path d="M40 111 h120" stroke="#ECE6D9" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#F2B45C" font-family="monospace" font-size="9" x="32" y="144">3 · qué no puede cambiar</text>
+<rect fill="#221f2e" height="22" rx="6" stroke="#F2B45C" stroke-width="1.5" width="156" x="32" y="150"></rect>
+<path d="M40 161 h80" stroke="#ECE6D9" stroke-linecap="round" stroke-width="2"></path>
+<path d="M170 156 l10 10 M180 156 l-10 10" stroke="#F2B45C" stroke-linecap="round" stroke-width="2"></path>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a lista de checagem antes de enviar: três caixas. Duas marcadas em verde e uma vazia em âmbar significam que a resposta vai falhar exatamente naquela parte, e não em outra." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<text fill="#948DA6" font-family="monospace" font-size="9" x="14" y="22">antes de enviar</text>
+<rect fill="#221f2e" height="20" rx="5" stroke="#7CE0C6" stroke-width="2" width="20" x="14" y="38"></rect>
+<path d="M19 48 l4 4 l8 -9" fill="none" stroke="#7CE0C6" stroke-width="2"></path>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="44" y="53">quién soy, para quién</text>
+<rect fill="#221f2e" height="20" rx="5" stroke="#7CE0C6" stroke-width="2" width="20" x="14" y="78"></rect>
+<path d="M19 88 l4 4 l8 -9" fill="none" stroke="#7CE0C6" stroke-width="2"></path>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="44" y="93">lo que tiene que suceder</text>
+<rect fill="#221f2e" height="20" rx="5" stroke="#F2B45C" stroke-width="2" width="20" x="14" y="118"></rect>
+<text fill="#F2B45C" font-family="monospace" font-size="9" x="44" y="133">lo que no puede pasar</text>
+<path d="M14 156 h192" stroke="#2A2637" stroke-width="1.5"></path>
+<path d="M24 138 q-6 22 20 30 h120" fill="none" stroke="#F2B45C" stroke-dasharray="3 2" stroke-width="1.5"></path>
+<text fill="#F2B45C" font-family="monospace" font-size="8" x="60" y="184">la respuesta falla aquí</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>La IA responde a una persona genérica hasta que le dices quién eres y para quién es la respuesta. Basta con una frase.</li>
+<li>Describir el resultado que quieres da más resultado que describir el camino: la IA elige las palabras que llevan hasta allí.</li>
+<li>Los límites son la parte más corta y la que más evita retrabajo: lo que la respuesta no puede incluir en cuanto a extensión, tono y promesas.</li>
+<li>Cuando la respuesta sale torcida, el defecto casi siempre está en una de las tres partes que faltaron en el pedido, y no en la IA.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu próximo paso</p>
+<p class="na-win">Acabas de escribir un pedido completo y comparar las dos respuestas en tu propia pantalla.</p>
+<p class="na-action">En los próximos 15 minutos, toma una solicitud que harías hoy en el trabajo —un correo electrónico, un aviso o un mensaje— y escribe solo las tres partes en una nota del celular, sin enviársela todavía a la IA. Mañana la pegas.</p>
+<p class="na-hook">En la próxima clase aprenderás a usar el chat sin miedo: dónde pegar el texto, qué adjuntar y cómo pedir tres versiones y ajustar el tono sin empezar de nuevo la conversación.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#trilha">← ruta</a><a href="#aula-2">próxima clase →</a></nav>
+<footer>Clase 1 · INEMA.CLUB PRO</footer>
+<script id="cards-1" type="application/json">
+[
+  {"front":"Você pediu 'uma mensagem para cliente' e recebeu um texto formal, longo e sem cara. Antes de culpar a IA, o que você acrescenta ao pedido?","back":"A primeira parte: apresente-se e diga com quem fala. Ex.: 'sou dona de uma clínica de bairro, falo com pacientes de mais de 50 anos pelo WhatsApp, tom próximo'. Sem isso a IA escreve para alguém que não existe."},
+  {"front":"Marta quer que os funcionários passem a pedir férias pelo sistema. Qual frase entra no pedido: 'escreva um comunicado sobre férias' ou 'quero que cada um saiba o que muda e o que fazer até dia 1º'? Por quê?","back":"A segunda, porque diz aonde o texto precisa chegar. Com o alvo definido, a IA acha o jeito de chegar lá. A primeira frase só nomeia o assunto, deixa o alvo por conta da sorte e custa rodadas de ajuste."},
+  {"front":"A resposta da IA a Renata veio com 'faremos um desconto', e ninguém autorizou desconto. Qual parte do pedido estava faltando?","back":"O que não pode acontecer. Sem limites, a IA acrescenta o que soa bem: prazos, descontos, promessas. Uma linha resolve: 'não prometa desconto, devolução nem prazo além do que eu escrevi'."},
+  {"front":"Qual a diferença entre dizer o resultado e dizer os limites num pedido?","back":"O resultado diz para onde o texto precisa levar (ex.: o cliente aceitar o prazo de sexta). Os limites dizem onde a IA deve parar (ex.: sem emoji, sem prometer prazo). Um puxa; o outro segura."}
+]
+</script>
+<!-- COMPLETUDE aula-1 | tipo=FUNDAMENTO | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="16min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Beatriz, Marta, Renata, Paulo)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="prompt"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~8 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1)
+  [OK] cards              <script id="cards-1"> presente (4 cartões: diagnóstico, decisão, diagnóstico, contraste)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [OK] teste-se-FUND      tipo=FUNDAMENTO: presente (1 quiz data-fb, step 04)
+  dosagem: pool = quiz + cartões + qbefore-after (step 02) + qanchor (step 04) = 4 obrigatórios, 0 opcionais (teto 5). densidade: 2 quadros funcionais em 4 steps, não adjacentes. rampa de acesso antes do bloco colável ("bilhete de encomenda já preenchido").
+-->
+</section>
+<!-- ===== AULA 2 · FERRAMENTA ===== -->
+<section class="view" data-aula="2" data-tempo="18min" id="v-aula-2">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Ruta única · Clase 2</p>
+<h1>El chat en la práctica:<br/><em>cuatro cosas que importan</em></h1>
+<p class="promise">Al terminar esta clase podrás abrir un chat de IA, hacer un pedido, pedir tres versiones y ajustar el tono en la misma conversación, sin empezar de nuevo y sin perderte.</p>
+<p class="why">La pantalla de un chat de IA tiene unos veinte botones, y vas a usar cuatro. El resto es para quienes trabajan con esto todo el día. Quienes empiezan se pierden por dos motivos: no saben dónde hacer clic y, cuando la respuesta sale mal, borran todo y vuelven a escribir. Esta clase resuelve ambos. Aprendes los cuatro botones y aprendes el par de pedidos que más rinde cuando la primera respuesta no sirve.</p>
+<p class="cue"><span class="arw">↓</span> desplázate para estudiar</p>
+</div>
+<!-- herofig · registro METÁFORA-DO-MUNDO-REAL: um controle remoto simples com só quatro botões marcados com fita colorida, o resto apagado -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<ellipse cx="150" cy="222" fill="#000" opacity=".28" rx="70" ry="8"></ellipse>
+<rect fill="#221f2e" height="200" rx="18" stroke="#948DA6" stroke-width="2" width="90" x="105" y="18"></rect>
+<rect fill="#1a1824" height="26" rx="6" stroke="#37324a" stroke-width="1.5" width="64" x="118" y="30"></rect>
+<path d="M126 43 h48" opacity=".5" stroke="#948DA6" stroke-width="2"></path>
+<g opacity=".28">
+<circle cx="126" cy="150" fill="#948DA6" r="7"></circle><circle cx="150" cy="150" fill="#948DA6" r="7"></circle><circle cx="174" cy="150" fill="#948DA6" r="7"></circle>
+<circle cx="126" cy="172" fill="#948DA6" r="7"></circle><circle cx="150" cy="172" fill="#948DA6" r="7"></circle><circle cx="174" cy="172" fill="#948DA6" r="7"></circle>
+<circle cx="126" cy="194" fill="#948DA6" r="7"></circle><circle cx="150" cy="194" fill="#948DA6" r="7"></circle><circle cx="174" cy="194" fill="#948DA6" r="7"></circle>
+</g>
+<rect fill="#7CE0C6" height="28" rx="7" width="28" x="118" y="68"></rect>
+<path d="M132 76 v12 M126 82 h12" stroke="#0E0D14" stroke-linecap="round" stroke-width="2.5"></path>
+<rect fill="#F2B45C" height="28" rx="7" width="28" x="154" y="68"></rect>
+<path d="M162 88 l12 -12 M164 74 h10 v10" stroke="#0E0D14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<rect fill="#7CE0C6" height="28" rx="7" width="28" x="118" y="104"></rect>
+<rect height="12" rx="2" stroke="#0E0D14" stroke-width="2" width="10" x="126" y="112"></rect><rect fill="#7CE0C6" height="12" rx="2" stroke="#0E0D14" stroke-width="2" width="10" x="130" y="108"></rect>
+<rect fill="#F2B45C" height="28" rx="7" width="28" x="154" y="104"></rect>
+<path d="M161 112 h14 M161 118 h14 M161 124 h9" stroke="#0E0D14" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M96 82 h14 M96 118 h14" stroke="#7CE0C6" stroke-dasharray="3 3" stroke-width="2"></path>
+<path d="M190 82 h14 M190 118 h14" stroke="#F2B45C" stroke-dasharray="3 3" stroke-width="2"></path>
+<rect fill="#ECE6D9" height="16" opacity=".85" rx="3" transform="rotate(-6 77 82)" width="34" x="60" y="74"></rect>
+<rect fill="#ECE6D9" height="16" opacity=".85" rx="3" transform="rotate(6 223 82)" width="34" x="206" y="74"></rect>
+<rect fill="#ECE6D9" height="16" opacity=".85" rx="3" transform="rotate(-6 77 118)" width="34" x="60" y="110"></rect>
+<rect fill="#ECE6D9" height="16" opacity=".85" rx="3" transform="rotate(6 223 118)" width="34" x="206" y="110"></rect>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> Una conversación por tema</h2>
+<p>Antes de tocar cualquier botón, una regla que evita la mitad de los problemas: cada tema tiene su propia conversación. Un <span class="gterm" data-def="O site ou aplicativo onde você escreve e a IA responde, como ChatGPT, Claude, Gemini ou Copilot. Funciona no celular e no computador." tabindex="0">chat de IA</span> recuerda todo lo que se dijo dentro de una conversación y olvida todo lo que está fuera de ella. Eso es bueno y malo al mismo tiempo. Es bueno porque puedes decir «ahora más corto» y sabe de qué estás hablando. Es malo porque, si usas la misma conversación para tres temas, los mezcla.</p>
+<p>Piensa en una conversación como una hoja en blanco. Escribes el pedido arriba, la respuesta aparece debajo y el ajuste va debajo de la respuesta. Todo lo que está en la hoja cuenta. Cuando cambia el tema, pasas la página. En el chat, pasar la página se llama abrir una conversación nueva. Cuesta un clic y no borra nada: la hoja anterior queda guardada.</p>
+<!-- ex-prof --><p>Paulo, que coordina el marketing de cuatro tiendas de materiales de construcción, lo aprendió por las malas. La primera semana usó una sola conversación para todo: la publicación sobre la promoción de cemento, luego la hoja de cálculo de las campañas del mes y después un correo para el proveedor de pintura. En el tercer pedido, la IA escribió el correo al proveedor mencionando la promoción de cemento y una columna de la hoja de cálculo. Desde su punto de vista, nada estaba mal: todo estaba en la misma hoja. Desde entonces, Paulo abre una conversación por tema y le pone un nombre a cada una.</p>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="ferramenta" data-versao="ChatGPT, Claude, Gemini e Copilot, versões gratuitas, set/2026">
+<h2><span class="n">02</span> Los cuatro botones: nueva conversación, adjuntar, copiar, historial</h2>
+<p>Vas a ver una pantalla con varios íconos. Parece el panel de un avión, pero funciona como un cuaderno: las páginas anteriores quedan en una lista a la izquierda, la página abierta ocupa el centro y el cuadro donde escribes está abajo. Solo vas a usar cuatro cosas de esta pantalla. El resto puede quedarse donde está.</p>
+<p>La primera es <b>nueva conversación</b>: un botón con un signo de más o un lápiz, casi siempre en la parte superior de la lista de la izquierda. Es el «pasar la página» del paso anterior. La segunda es <b>adjuntar</b>: un clip junto al cuadro de texto. Sirve para entregarle a la IA un archivo, una foto o una tabla, en lugar de escribir el contenido. La tercera es <b>copiar</b>: aparece debajo de cada respuesta, normalmente como dos cuadritos superpuestos. Con un clic, la respuesta completa va al portapapeles, lista para pegar en el correo electrónico o en WhatsApp. La cuarta es <span class="gterm" data-def="A lista das suas conversas anteriores, em ordem de data. Fica à esquerda da tela no computador e atrás de um botão de três linhas no celular." tabindex="0">historial</span>: la lista de las conversaciones anteriores. Allí encuentras la hoja de ayer.</p>
+<!-- ex-prof --><p>Beatriz, dueña de una clínica de fisioterapia con seis profesionales, quería un mensaje de confirmación que respetara los horarios de cada uno. En vez de escribir toda la cuadrícula, hizo clic en el clip, eligió la foto de la tabla de horarios pegada en la recepción y escribió: "con base en esta tabla, escribe la confirmación para la paciente A el jueves a las 15h, con la fisioterapeuta que atiende en ese horario". La IA leyó la foto, encontró el nombre correcto y escribió el mensaje. Beatriz hizo clic en copiar y lo pegó en WhatsApp. Tres clics, sin escribir nada más que el pedido.</p>
+<div class="qsteps">
+<p class="qsk">Los cuatro botones, en el orden en que los usas</p>
+<ol>
+<li><b>Abre una conversación nueva</b> con el botón de más o el lápiz, arriba de la lista de la izquierda. En el celular, la lista está detrás del botón de las tres líneas.</li>
+<li><b>Pega el pedido</b> en el cuadro para escribir, abajo, y presiona enviar (la flecha o la tecla Enter).</li>
+<li><b>Adjunta, si hace falta</b>, con el clip junto al cuadro: una foto, una hoja de cálculo, un documento. Adjunta el archivo antes de enviar la solicitud, no después.</li>
+<li><b>Copia la respuesta</b> con el botón de los dos cuadrados que aparece debajo, y pégalo donde lo vayas a usar.</li>
+<li><b>Vuelve a encontrarlo en el historial</b>: la conversación queda en la lista de la izquierda con un nombre automático. Puedes cambiarle el nombre haciendo clic en él.</li>
+</ol>
+</div>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="ferramenta" data-versao="ChatGPT, Claude, Gemini e Copilot, versões gratuitas, set/2026">
+<h2><span class="n">03</span> Tres versiones y un ajuste</h2>
+<p>La primera respuesta de un chat de IA es la más común, no la mejor. Elige el camino más probable, y lo más probable suele ser lo más aburrido. Hay una forma sencilla de evitarlo, y aprovecha la conversación: pide tres versiones de una vez, diferentes entre sí, y elige. Elegir entre tres es más fácil que corregir una. Lees las tres en veinte segundos y señalas la que más se parece a ti.</p>
+<p>Después de elegir, viene la segunda mitad, y es aquí donde la conversación muestra su valor. No necesitas abrir nada ni volver a explicar quién eres o qué quieres. Escribe debajo de la respuesta: "la segunda versión, más corta y sin la palabra 'estimados'". La IA sabe cuál es la segunda, sabe de qué se trata y devuelve solo el ajuste. Esto se llama ajustar en la misma conversación, y es el par de pedidos que más rinde en el día a día: tres versiones, un ajuste. Ambos están en el kit como pedidos 19 y 20, y son la práctica de esta clase.</p>
+<!-- ex-prof --><p>Marta, gerente de RR. HH. en una fábrica de envases con 120 empleados, necesitaba un título para el comunicado sobre el nuevo horario del comedor. Pidió tres opciones: una directa, una más cálida y una más corta. Recibió "Nuevo horario del comedor a partir del lunes", "Nuevo horario del comedor: mira qué cambia para ti" y "Comedor: nuevo horario". Eligió la segunda y escribió debajo: "esa, pero redúcela a la mitad". Recibió "Comedor: mira qué cambia para ti". Le tomó un minuto, incluida la lectura. Antes, se quedaba diez minutos mirando la pantalla y elegía la primera opción que aparecía.</p>
+<p>Fíjate en lo que Marta no hizo: no abrió una conversación nueva para el ajuste, no volvió a pegar el comunicado ni explicó que era para el comedor. La conversación ya lo sabía. Cada vez que empiezas de nuevo, pierdes todo lo que la IA ya entendió sobre tu pedido.</p>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="fundamento">
+<h2><span class="n">04</span> Cuando la respuesta sale mal, casi siempre el problema está en el pedido</h2>
+<p>Puede pasar: haces un pedido y la respuesta llega genérica, demasiado larga o con un tono que no es el tuyo. La reacción natural es pensar que la IA "no entendió" o que "hoy está fallando". No funciona peor por la tarde. En ocho de cada diez respuestas malas, faltó una de las tres partes de la clase 1: quién eres, qué resultado quieres y qué no puede pasar. La respuesta falla justo donde faltó esa parte.</p>
+<p>Por eso, la solución no es borrar y escribir todo de nuevo. Es revisar la respuesta, preguntarse "¿qué faltó?" y escribir solo la parte que faltó debajo, en la misma conversación. "Olvidé decirte: soy gerente de atención al cliente y esto va dirigido a un cliente enojado". Listo. La IA rehace la respuesta con esa pieza nueva, sin perder el resto. Y cuando ni siquiera sabes bien qué quieres, el kit tiene una salida: el pedido 17, que cambia las reglas y le indica a la IA que haga preguntas antes de responder.</p>
+<!-- ex-prof --><p>Renata, gerente de atención al cliente de una empresa que vende un sistema de gestión para 800 clientes, intentó pedir "un texto para avisar a los clientes sobre la actualización". Recibió un comunicado de dos páginas, formal, que nunca usaría. El primer día, borró todo e hizo tres intentos, cada vez con una frase distinta y cada vez peor. El segundo día usó el pedido 17: "quiero avisar a los clientes sobre una actualización; antes de responder, hazme las cinco preguntas que necesitas". La IA preguntó quiénes eran los clientes, qué cambiaba, si había que hacer algo, cuál era el tono y qué extensión debía tener. Renata respondió una por una. El texto que recibió tenía seis líneas y sonaba como ella.</p>
+<div class="qerr">
+<p class="qk">Error común</p>
+<p class="qerr-txt"><b>Volver a escribir el pedido completo cuando la respuesta sale mal.</b> Pasa porque la respuesta mala da la sensación de que la IA "no entendió nada", y empezar de nuevo parece más seguro. Pero empezar de nuevo descarta lo que ya entendió, y el nuevo pedido suele tener la misma pieza faltante. En la misma conversación, escribe solo lo que cambie: "más corto", "para un cliente molesto", "sin prometer plazos". La segunda respuesta casi siempre acierta.</p>
+</div>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="prompt" data-practice="p2">
+<p class="pk">Practica ahora <span class="pcount">0/5 hecho</span></p>
+<h3 class="ph">Tres versiones y un ajuste, en la misma conversación</h3>
+<p class="pgoal">En unos 10 minutos, abrir una conversación nueva, pedir tres versiones de un texto corto de tu trabajo, elegir una y ajustar el tono sin empezar de nuevo. Terminas con un texto listo para usar y los cuatro botones probados.</p>
+<p class="psafe">Nada de esto se envía a nadie: el texto queda en el chat hasta que lo copies. Usa un tema real, pero sin nombres de clientes, documentos ni valores de cuentas. Si la respuesta sale extraña, no la borres: escribe debajo qué quieres cambiar. Y si quieres empezar de nuevo, basta un clic para abrir otra conversación.</p>
+<p>El bloque de abajo tiene las dos solicitudes. Es como una nota en dos partes: pegas la primera ahora y la segunda después de leer las tres versiones. Cambia solo lo que está entre &lt; y &gt;.</p>
+<div class="pcodewrap"><button class="pcopy" type="button">copiar</button><pre class="pcode">PEDIDO 1 (cole agora):
+Sou &lt;quem você é, ex.: gestora de RH de uma fábrica com 120 funcionários&gt;. Preciso de &lt;o que, ex.: um título para o comunicado sobre o novo horário do refeitório&gt;. Me dê 3 versões bem diferentes entre si: uma direta, uma mais calorosa, uma mais curta. Para cada uma, uma linha dizendo quando ela funciona melhor. Não escolha por mim.
+
+PEDIDO 2 (cole depois de ler as três, na mesma conversa):
+A versão &lt;1, 2 ou 3&gt;. Mude só o tom: &lt;ex.: menos formal, como eu falaria com um colega&gt;. Corte pela metade. Mantenha os fatos e os nomes exatamente como estão.</pre></div>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> <span>Abre una conversación nueva (botón de más o lápiz, en la parte superior de la lista de la izquierda). Confirma que el cuadro de escritura esté vacío y que no haya historial arriba.</span></label></li>
+<li><label><input data-ptask="2" type="checkbox"/> <span>Copia el PEDIDO 1, cambia las partes entre &lt; &gt; y envíalo. Debes ver tres textos numerados, visiblemente diferentes, cada uno con una línea de "cuándo usarlo". Si son parecidos, escribe debajo: "más diferentes entre sí".</span></label></li>
+<li><label><input data-ptask="3" type="checkbox"/> <span>Elige una de las tres. Copia el PEDIDO 2, completa el número y el tono, y envíalo en la misma conversación, sin abrir nada. Debes ver la versión elegida, más corta, con el tono que pediste y con los mismos hechos.</span></label></li>
+<li><label><input data-ptask="4" type="checkbox"/> <span>Haz clic en copiar debajo de la última respuesta y pégala en un correo electrónico, una nota o en WhatsApp para ti. Si el texto se pegó completo, el botón funcionó.</span></label></li>
+<li><label><input data-ptask="5" type="checkbox"/> <span>Cierra la conversación y búscala de nuevo en el historial, a la izquierda. Haz clic en el nombre y cámbialo por algo que reconozcas mañana, como "título comedor". Está listo cuando la conversación tenga nombre y el texto final esté pegado fuera del chat.</span></label></li>
+</ol>
+<p class="pdone">Acabas de completar el ciclo: conversación nueva, pedido, tres versiones, ajuste en la misma conversación, copiar y guardar. Estos cuatro botones y este par de pedidos son lo que vas a usar en casi todo de ahora en adelante.</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<!-- registro DIAGRAMA-DE-MECANISMO -->
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; à esquerda, duas pastas separadas: cada assunto na sua conversa, e a IA sabe do que se trata. À direita, uma pasta só com tudo misturado (âmbar): o e-mail sai citando a planilha." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<text fill="#948DA6" font-family="monospace" font-size="9" x="14" y="22">una conversación por tema</text>
+<path d="M18 48 h30 l6 6 h34 v48 h-70 z" fill="#221f2e" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M26 72 h44 M26 82 h32 M26 92 h38" opacity=".8" stroke="#7CE0C6" stroke-width="2"></path>
+<text fill="#ECE6D9" font-family="monospace" font-size="8" x="24" y="64">publicación</text>
+<path d="M18 118 h30 l6 6 h34 v48 h-70 z" fill="#221f2e" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M26 142 h44 M26 152 h32 M26 162 h38" opacity=".8" stroke="#7CE0C6" stroke-width="2"></path>
+<text fill="#ECE6D9" font-family="monospace" font-size="8" x="24" y="134">hoja de cálculo</text>
+<text fill="#948DA6" font-family="monospace" font-size="9" x="122" y="22">todo mezclado</text>
+<path d="M128 48 h30 l6 6 h44 v118 h-80 z" fill="#221f2e" stroke="#F2B45C" stroke-width="2"></path>
+<path d="M136 72 h50 M136 82 h30" opacity=".7" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M136 100 h44 M136 110 h54" opacity=".7" stroke="#948DA6" stroke-width="2"></path>
+<path d="M136 128 h36 M136 138 h50 M136 148 h28" stroke="#F2B45C" stroke-width="2"></path>
+<text fill="#ECE6D9" font-family="monospace" font-size="8" x="136" y="64">publicación+hoja de cálculo+correo electrónico</text>
+<path d="M150 146 l6 -6 l6 6" fill="none" stroke="#F2B45C" stroke-width="2"></path>
+<text fill="#F2B45C" font-family="monospace" font-size="8" x="110" y="190">el correo menciona la hoja de cálculo</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a tela do chat esquematizada: lista de conversas à esquerda, resposta no meio, caixa de escrever embaixo. Só os quatro botões em verde importam: nova conversa, anexar, copiar e histórico. O resto fica apagado." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#1a1824" height="172" rx="8" stroke="#948DA6" stroke-width="2" width="200" x="10" y="14"></rect>
+<rect fill="#221f2e" height="172" rx="8" stroke="#37324a" stroke-width="1.5" width="58" x="10" y="14"></rect>
+<rect fill="#7CE0C6" height="14" rx="4" width="42" x="18" y="24"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" x="24" y="34">+ nueva</text>
+<text fill="#7CE0C6" font-family="monospace" font-size="7" x="18" y="56">historial</text>
+<path d="M18 64 h40 M18 76 h34 M18 88 h40 M18 100 h30" opacity=".6" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M18 120 h40 M18 132 h34 M18 144 h40" opacity=".3" stroke="#948DA6" stroke-width="2"></path>
+<g opacity=".3"><circle cx="190" cy="26" fill="#948DA6" r="4"></circle><circle cx="178" cy="26" fill="#948DA6" r="4"></circle><circle cx="166" cy="26" fill="#948DA6" r="4"></circle></g>
+<rect fill="#221f2e" height="72" rx="6" stroke="#37324a" stroke-width="1.5" width="122" x="78" y="44"></rect>
+<path d="M86 56 h100 M86 66 h84 M86 76 h100 M86 86 h60" opacity=".55" stroke="#948DA6" stroke-width="2"></path>
+<rect fill="#7CE0C6" height="12" rx="3" width="30" x="86" y="98"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="7" x="90" y="107">copiar</text>
+<g opacity=".3"><rect fill="#948DA6" height="12" rx="3" width="20" x="122" y="98"></rect><rect fill="#948DA6" height="12" rx="3" width="20" x="148" y="98"></rect></g>
+<rect fill="#0E0D14" height="26" rx="8" stroke="#948DA6" stroke-width="1.5" width="122" x="78" y="150"></rect>
+<circle cx="92" cy="163" fill="#7CE0C6" r="8"></circle>
+<path d="M89 165 l5 -5 a2 2 0 0 1 3 3 l-5 5" fill="none" stroke="#0E0D14" stroke-width="1.5"></path>
+<text fill="#948DA6" font-family="monospace" font-size="7" x="104" y="166">escribe la solicitud…</text>
+<path d="M186 158 l8 5 l-8 5 z" fill="#948DA6" opacity=".5"></path>
+<text fill="#7CE0C6" font-family="monospace" font-size="7" x="78" y="134">adjuntar = clip</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; o par que mais rende: um pedido gera três versões, você escolhe uma (verde), e o ajuste acontece embaixo, na mesma conversa. Nenhuma seta volta ao início: recomeçar joga fora o que a IA já entendeu." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#221f2e" height="24" rx="6" stroke="#948DA6" stroke-width="2" width="80" x="70" y="14"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="8" x="86" y="30">solicitud</text>
+<path d="M110 38 v12 M110 50 h-70 v14 M110 50 v14 M110 50 h70 v14" stroke="#948DA6" stroke-width="2"></path>
+<rect fill="#221f2e" height="26" rx="6" stroke="#948DA6" stroke-width="2" width="48" x="16" y="64"></rect>
+<rect fill="#221f2e" height="26" rx="6" stroke="#7CE0C6" stroke-width="2.5" width="48" x="86" y="64"></rect>
+<rect fill="#221f2e" height="26" rx="6" stroke="#948DA6" stroke-width="2" width="48" x="156" y="64"></rect>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="30" y="81">v.1</text>
+<text fill="#7CE0C6" font-family="monospace" font-size="8" x="100" y="81">v.2</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="170" y="81">v.3</text>
+<path d="M110 90 v22" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M105 106 l5 6 l5 -6" fill="none" stroke="#7CE0C6" stroke-width="2"></path>
+<rect fill="#221f2e" height="24" rx="6" stroke="#7CE0C6" stroke-width="2" width="100" x="60" y="114"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="8" x="70" y="130">ajuste: más corto</text>
+<path d="M110 138 v20" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M105 152 l5 6 l5 -6" fill="none" stroke="#7CE0C6" stroke-width="2"></path>
+<rect fill="#7CE0C6" height="24" rx="6" width="80" x="70" y="160"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" x="86" y="176">texto final</text>
+<text fill="#948DA6" font-family="monospace" font-size="7" x="14" y="194">misma conversación, de principio a fin</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a árvore do conserto: resposta ruim leva a três perguntas (faltou quem sou? o resultado? o limite?). Cada uma se resolve escrevendo só a peça que faltou, embaixo, na mesma conversa. O caminho âmbar, recomeçar, é o que se evita." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#221f2e" height="24" rx="6" stroke="#F2B45C" stroke-width="2" width="100" x="60" y="12"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="8" x="72" y="28">respuesta mala</text>
+<path d="M110 36 v10 M110 46 h-76 v12 M110 46 v12 M110 46 h76 v12" stroke="#948DA6" stroke-width="2"></path>
+<rect fill="#221f2e" height="30" rx="6" stroke="#948DA6" stroke-width="2" width="50" x="10" y="58"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="7" x="16" y="71">faltó</text><text fill="#ECE6D9" font-family="monospace" font-size="7" x="16" y="81">¿quién soy?</text>
+<rect fill="#221f2e" height="30" rx="6" stroke="#948DA6" stroke-width="2" width="50" x="85" y="58"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="7" x="91" y="71">faltó el</text><text fill="#ECE6D9" font-family="monospace" font-size="7" x="91" y="81">¿resultado?</text>
+<rect fill="#221f2e" height="30" rx="6" stroke="#948DA6" stroke-width="2" width="50" x="160" y="58"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="7" x="166" y="71">faltó el</text><text fill="#ECE6D9" font-family="monospace" font-size="7" x="166" y="81">¿límite?</text>
+<path d="M35 88 v20 M110 88 v20 M185 88 v20" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M35 108 h150" stroke="#7CE0C6" stroke-width="2"></path>
+<path d="M110 108 v14" stroke="#7CE0C6" stroke-width="2"></path>
+<rect fill="#7CE0C6" height="26" rx="6" width="140" x="40" y="122"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" x="48" y="139">escribe solo lo que faltó</text>
+<path d="M160 24 h40 v150 h-90" fill="none" stroke="#F2B45C" stroke-dasharray="4 3" stroke-width="2"></path>
+<path d="M116 174 l-6 -5 l6 -5" fill="none" stroke="#F2B45C" stroke-width="2"></path>
+<text fill="#F2B45C" font-family="monospace" font-size="7" x="122" y="186">volver a empezar: evita</text>
+<text fill="#948DA6" font-family="monospace" font-size="7" x="14" y="170">en la misma conversación</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>Una conversación por tema: la IA recuerda todo lo que está en la hoja y olvida lo que queda fuera. Pasar la página es abrir una conversación nueva y cuesta un clic.</li>
+<li>De toda la pantalla, usarás cuatro botones: nueva conversación, adjuntar, copiar e historial. El resto puede quedarse como está.</li>
+<li>La combinación que más rinde: pedir tres versiones y elegir una; después ajustar el tono y la extensión debajo, sin volver a explicar nada.</li>
+<li>Casi siempre, una respuesta mala se debe a un pedido incompleto. Escribe solo la parte que faltó en la misma conversación; empezar de nuevo descarta lo que la IA ya entendió.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu próximo paso</p>
+<p class="na-win">Acabas de completar un ciclo en el chat, desde el botón de nueva conversación hasta copiar el texto, sin empezar de nuevo ni una vez.</p>
+<p class="na-action">En los próximos 15 minutos, toma un texto breve que tengas que enviar hoy, abre una conversación nueva, pide tres versiones y ajusta una. Envía la versión final de verdad.</p>
+<p class="na-hook">En la próxima clase aprenderás lo único que distingue a quienes usan la IA con seguridad de quienes se meten en problemas: qué verificar antes de reenviar y cómo hacerlo en cinco minutos.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#aula-1">← clase anterior</a><a href="#aula-3">próxima clase →</a></nav>
+<footer>Clase 2 · INEMA.CLUB PRO</footer>
+<script id="cards-2" type="application/json">
+[
+  {"front":"Você pediu um e-mail para o fornecedor na mesma conversa em que fez o post da promoção, e o e-mail saiu citando a promoção. O que aconteceu e como evitar da próxima vez?","back":"A IA usou tudo o que estava na conversa, inclusive o assunto anterior. Cada assunto precisa da própria conversa: abra uma nova (botão de mais ou lápis) antes de mudar de tema."},
+  {"front":"A primeira versão do título saiu sem graça. Você abre uma conversa nova e digita o pedido de novo, ou escreve embaixo da resposta? Por quê?","back":"Escreve embaixo, na mesma conversa: 'três versões diferentes' ou 'mais curto, menos formal'. Recomeçar joga fora o que ela já entendeu e costuma repetir a mesma falha."},
+  {"front":"Beatriz quer que a IA use a tabela de horários da recepção sem digitar a grade inteira. Qual botão ela usa, em que momento, e o que escreve depois?","back":"O clipe (anexar), antes de enviar o pedido: escolhe a foto da tabela e escreve o pedido citando a tabela ('com base nesta tabela, escreva…'). Depois copia a resposta pelo botão de dois quadradinhos."}
+]
+</script>
+<!-- COMPLETUDE aula-2 | tipo=FERRAMENTA | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="18min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Paulo, Beatriz, Marta, Renata)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="prompt"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~10 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1)
+  [OK] cards              <script id="cards-2"> presente (3 cartões: diagnóstico, decisão, aplicação)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [N/A] teste-se-FUND     aula é FERRAMENTA (obrigação não se aplica); sem teste-se opcional
+  dosagem: pool = qsteps (step 02) + qerr (step 04) obrigatórios + cartões (3) = 3 (teto 5). densidade: 2 quadros funcionais em 4 steps, não adjacentes. data-versao nos steps 02 e 03 (ferramenta). rampa de acesso no step 02 ("painel de avião que funciona como um caderno") e na prática ("bilhete em duas partes").
+-->
+</section>
+<!-- ===== AULA 3 · FUNDAMENTO ===== -->
+<section class="view" data-aula="3" data-tempo="18min" id="v-aula-3">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Ruta única · Clase 3</p>
+<h1>Confía,<br/><em>pero comprueba</em></h1>
+<p class="promise">Al terminar esta clase podrás señalar, en una respuesta de la IA, los tres tipos de cosas que hay que verificar (número, plazo y promesa), verificarlos en cinco minutos y nunca pegar datos reales de nadie.</p>
+<p class="why">En la clase pasada viste a la IA escribir bien y rápido. Aquí es donde mucha gente se mete en problemas: reenvía un número redondo, un plazo que parecía correcto o una promesa que nadie hizo. La respuesta incorrecta tiene el mismo aspecto que la correcta. Esta clase te da el hábito de cinco minutos que distingue a quienes usan la IA con seguridad de quienes después tienen que mandar tres correos para corregirlo.</p>
+<p class="cue"><span class="arw">↓</span> desplázate para estudiar</p>
+</div>
+<!-- herofig · registro METÁFORA-DO-MUNDO-REAL: óculos de leitura e uma lupa sobre um recibo de papel, com três itens marcados a caneta -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<ellipse cx="150" cy="214" fill="#000" opacity=".25" rx="118" ry="9"></ellipse>
+<rect fill="#ECE6D9" height="176" opacity=".95" rx="4" transform="rotate(-3 145 118)" width="150" x="70" y="30"></rect>
+<path d="M90 56 h100 M90 72 h70" opacity=".35" stroke="#0E0D14" stroke-linecap="round" stroke-width="2" transform="rotate(-3 145 118)"></path>
+<path d="M90 96 h60 M170 96 h30" opacity=".6" stroke="#0E0D14" stroke-linecap="round" stroke-width="2.4" transform="rotate(-3 145 118)"></path>
+<path d="M90 118 h50 M170 118 h30" opacity=".6" stroke="#0E0D14" stroke-linecap="round" stroke-width="2.4" transform="rotate(-3 145 118)"></path>
+<path d="M90 140 h76 M170 140 h30" opacity=".6" stroke="#0E0D14" stroke-linecap="round" stroke-width="2.4" transform="rotate(-3 145 118)"></path>
+<path d="M90 168 h110" opacity=".35" stroke="#0E0D14" stroke-dasharray="4 3" stroke-linecap="round" stroke-width="2" transform="rotate(-3 145 118)"></path>
+<circle cx="204" cy="96" r="7" stroke="#F2B45C" stroke-width="3" transform="rotate(-3 145 118)"></circle>
+<circle cx="204" cy="118" r="7" stroke="#F2B45C" stroke-width="3" transform="rotate(-3 145 118)"></circle>
+<circle cx="204" cy="140" r="7" stroke="#F2B45C" stroke-width="3" transform="rotate(-3 145 118)"></circle>
+<g transform="translate(40 150)">
+<circle cx="0" cy="0" fill="#221f2e" opacity=".95" r="22" stroke="#948DA6" stroke-width="4"></circle>
+<circle cx="0" cy="0" fill="none" r="16" stroke="#7CE0C6" stroke-width="2"></circle>
+<path d="M16 16 l26 26" stroke="#948DA6" stroke-linecap="round" stroke-width="7"></path>
+</g>
+<g transform="translate(196 186)">
+<ellipse cx="0" cy="0" fill="#221f2e" opacity=".9" rx="20" ry="13" stroke="#ECE6D9" stroke-width="3"></ellipse>
+<ellipse cx="46" cy="0" fill="#221f2e" opacity=".9" rx="20" ry="13" stroke="#ECE6D9" stroke-width="3"></ellipse>
+<path d="M20 0 h6" stroke="#ECE6D9" stroke-width="3"></path>
+<path d="M-20 -2 l-14 -8 M66 -2 l14 -8" stroke="#ECE6D9" stroke-linecap="round" stroke-width="3"></path>
+</g>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> La IA se equivoca con la misma seguridad con que acierta</h2>
+<p>Cuando alguien no está seguro, te das cuenta. Duda, dice "creo que", pide verificarlo más tarde. El <span class="gterm" data-def="O site ou aplicativo onde você escreve e a IA responde, como ChatGPT, Claude, Gemini ou Copilot." tabindex="0">chat de IA</span> no hace nada de eso. Escribe un número inventado con la misma frase convincente con la que escribe un número correcto. No hay tono de duda. La respuesta incorrecta y la correcta llegan con la misma apariencia, al mismo ritmo, con la misma seguridad.</p>
+<p>Esto no es un defecto de un producto específico. Así funciona esta tecnología: arma la frase más probable, no la frase verificada. La mayoría de las veces, la frase probable también es la correcta, y por eso la IA es tan útil para escribir. Pero "la mayoría de las veces" no sirve para un valor que se envía a 800 clientes.</p>
+<p>Piensa en un colega nuevo, muy elocuente, que responde todo al instante y nunca dice "no sé". Te caería bien. También aprenderías, en una semana, a no repetir un número que dijo sin revisar la hoja de cálculo. Esa es la relación adecuada con la IA: ella escribe, tú verificas. No se trata de desconfiar de todo, sino de desconfiar de ciertos tipos de fragmentos, que aprenderás a reconocer en el siguiente paso.</p>
+<!-- ex-prof --><p>Renata, gerente de atención al cliente, le pidió a la IA un aviso sobre un cambio en el sistema. El texto llegó listo, bien escrito, y decía que "el ajuste reduce el tiempo de emisión en un 40%". Ella nunca había mencionado un 40%. La IA completó la frase con un número que parecía convincente. Renata casi se lo reenvía a 800 clientes. Se detuvo porque el número era demasiado redondo, y esta clase convertirá esa desconfianza en un hábito.</p>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="fundamento">
+<h2><span class="n">02</span> Los tres que siempre hay que verificar: número, plazo, promesa</h2>
+<p>No necesitas desconfiar de todo. Eso cansa y hace que la persona deje de usarla. Necesitas desconfiar de tres tipos de fragmentos, siempre los mismos. <b>Número:</b> cualquier valor, porcentaje, cantidad o cálculo. <b>Plazo:</b> cualquier fecha, "hasta el viernes", "en 48 horas", "a partir de octubre". <b>Promesa:</b> cualquier compromiso en nombre de tu empresa, como "vamos a devolver", "sin costo", "garantizamos".</p>
+<p>Estos tres tienen algo en común: si están equivocados, alguien te lo reclama. Un adjetivo equivocado se ve mal. Un plazo equivocado genera una queja. La regla es sencilla: antes de reenviar, resalta los tres tipos y verifica cada uno en la <span class="gterm" data-def="O lugar de onde a informação veio de verdade: o contrato, a planilha, o sistema da empresa, a pessoa que sabe. Nunca a própria resposta da IA." tabindex="0">fuente</span>. Si no sabes cuál es la fuente, ese fragmento no va.</p>
+<!-- ex-prof --><p>Marta, de RR. HH., pidió un texto que explicara la regla de vacaciones y recibió "el empleado tiene derecho a 30 días corridos, que puede dividir en hasta dos períodos". En su empresa, lo correcto es hasta tres períodos. Paulo, de marketing, pidió una publicación y recibió un precio que la IA copió del ejemplo que él mismo había dado la semana anterior y que ya estaba desactualizado. En ambos casos la IA no mintió: completó con lo que parecía correcto.</p>
+<div class="qbefore-after">
+<div class="qba-col qba-before"><p class="qba-lbl">Antes</p><p class="qba-txt">Renata copiaba directamente el texto de la IA y se lo enviaba a los clientes. En promedio, una vez por semana, algún número o plazo salía mal. Corregirlo costaba tres correos, una llamada y un día de desgaste con el equipo.</p></div>
+<div class="qba-col qba-depois"><p class="qba-lbl">Después</p><p class="qba-txt">Antes de enviar, ella resalta los números, los plazos y las promesas. Verifica cada uno en el sistema o con quien sabe. Cinco minutos por texto. En dos meses, no hubo que enviar ninguna corrección.</p></div>
+<div class="qba-saldo"><b>Saldo:</b> de una corrección por semana, con tres correos cada una, a cero correcciones en dos meses, con un costo de cinco minutos por texto.</div>
+</div>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="fundamento">
+<h2><span class="n">03</span> Nunca pegues datos reales de nadie</h2>
+<p>Esta es la única regla de esta clase que no tiene excepciones. Nombre completo de un cliente, número de documento, teléfono, dirección, monto de la cuenta de una persona: nada de eso se incluye en el chat. El chat parece una conversación privada en tu pantalla, pero es un servicio de una empresa externa. Lo que pegas sale de tu edificio. No necesitas saber adónde va para decidir que no irá.</p>
+<p>La buena noticia es que el pedido funciona exactamente igual con datos inventados. La IA no necesita saber que la paciente se llama Ana Lúcia para escribir un buen mensaje de confirmación. Necesita saber que es una paciente, que la cita es el jueves a las 15h y que tu tono es cercano. Cambia el nombre por "paciente A", el valor por cualquier número redondo, y el resultado sale igual. Después, al enviarlo, pones el nombre verdadero.</p>
+<p>Qué cuenta como dato real de una persona: nombre completo, documento, teléfono, correo electrónico, dirección, fecha de nacimiento, número de cuenta o de matrícula, y cualquier valor vinculado a una persona específica. Lo que puedes incluir sin problema: el tipo de persona ("una paciente", "un cliente de la tienda"), la situación ("se atrasó dos veces"), tu tono y el resultado que quieres. Si tienes dudas sobre si algo es un dato real, trátalo como si lo fuera. Cambiarlo por un nombre inventado cuesta dos segundos y nunca falla.</p>
+<!-- ex-prof --><p>Beatriz, dueña de la clínica, probó el mensaje para cambiar la cita con "paciente A, consulta del jueves". Aprobó el texto, lo pegó en WhatsApp y solo entonces cambió "paciente A" por el nombre real. Le tomó diez segundos más. La recepcionista hace lo mismo: tiene el texto guardado con "paciente A" y nunca escribió un nombre real en el chat. Si algún día alguien pregunta qué pone la clínica en la IA, la respuesta es "nada que identifique a una persona".</p>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="fundamento">
+<h2><span class="n">04</span> Pide el método, no el veredicto</h2>
+<p>Cuando recibes una afirmación y quieres verificarla, sientes la tentación de preguntarle a la propia IA: "¿esto es correcto?". No lo hagas. Responde "sí" y "no" con la misma seguridad en ambos casos, por el mismo motivo del primer paso de esta clase. Lo que funciona es pedirle el método: "¿cómo puedo verificar esto en cinco minutos, con una fuente?". Así te da algo que puedes hacer por tu cuenta, y el veredicto es tuyo.</p>
+<p>Una frase que ayuda mucho cuando la pones al final del pedido es: "si no estás seguro, dilo". La IA empieza a señalar cuándo está adivinando, y ese aviso vale más que una respuesta demasiado convincente. El pedido 13 del kit hace exactamente eso: pide qué tendría que ser cierto, cómo comprobarlo en cinco minutos y qué cambia si está equivocado.</p>
+<!-- ex-prof --><p>Un proveedor le dijo a Paulo que "el 70% de las remodelaciones comienza en enero" y él quería usarlo en un anuncio. En lugar de preguntar si era verdad, pegó el pedido 13. La respuesta dijo que no conocía el origen del dato y sugirió verificarlo con la asociación del sector o con las ventas de las cuatro tiendas en los últimos eneros. Revisó la hoja de cálculo de ventas. El pico era en marzo. El anuncio salió con su dato, no con el del proveedor.</p>
+<div class="qanchor"><p>La IA es excelente para escribir y pésima para estar segura. Úsala para lo primero y verifica lo segundo.</p></div>
+<div class="quiz" data-answer="c">
+<p class="qk">Ponte a prueba</p><p class="q">Marta recibió de la IA un comunicado con la frase "el nuevo plan de salud cubre consultas a partir del 1 de noviembre". Ella no indicó esa fecha en la solicitud. ¿Qué hace?</p>
+<button class="opt" data-fb="Perguntar à IA não resolve: ela vai confirmar ou negar com a mesma segurança, porque não tem a fonte. Quem tem a fonte é a operadora ou o contrato." data-k="a">Preguntarle a la IA si la fecha es correcta y enviarla si lo confirma</button>
+<button class="opt" data-fb="A frase está bem escrita, mas é um prazo, e prazo é um dos três que sempre se conferem. Uma data errada vira reclamação de 120 funcionários." data-k="b">Envíalo, porque la frase está clara y bien escrita</button>
+<button class="opt" data-fb="Certo. Data é prazo, prazo se confere na fonte. O contrato ou a operadora dizem a data real. Se for outra, ela troca; se ninguém souber, o trecho sai do texto." data-k="c">Resalta la fecha, verifícala en el contrato con la operadora y solo entonces envíala</button>
+<p class="qfb"></p>
+</div>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="tarefa" data-practice="p3">
+<p class="pk">Practica ahora <span class="pcount">0/4 hecho</span></p>
+<h3 class="ph">Resalta y verifica los tres en una respuesta real</h3>
+<p class="pgoal">En unos 10 minutos, tomar la mejor respuesta que te dio la IA en la clase 2 (o cualquier texto que ya haya escrito para ti), resaltar cada número, plazo y promesa, y verificar cada uno en la fuente.</p>
+<p class="psafe">Solo vas a leer y tomar notas. No se envía nada a nadie, nada cambia en tu trabajo y no se incluyen datos reales en el chat. Si no tienes una respuesta guardada, pídele ahora a la IA un aviso breve sobre cualquier cambio inventado en tu empresa y usa ese texto.</p>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> <span>Pega el texto de la IA en una hoja, un documento o una nota del celular. Léelo una vez completo sin marcar nada, solo para saber de qué habla.</span></label></li>
+<li><label><input data-ptask="2" type="checkbox"/> <span>Vuelve a leer, ahora con un bolígrafo o marcador. Resalta todo <b>número</b> (valores, porcentajes, cantidades), cada <b>plazo</b> (fechas, "hasta el viernes", "en 48 horas") y cada <b>promesa</b> en nombre de la empresa («vamos», «garantizamos», «sin costo»). Cuenta cuántos fragmentos quedaron resaltados.</span></label></li>
+<li><label><input data-ptask="3" type="checkbox"/> <span>Por cada parte resaltada, escribe al lado de dónde viene la fuente: el contrato, la hoja de cálculo, el sistema, la persona que sabe. Si no sabes cuál es la fuente de alguna, escribe "sin fuente" al lado. Este fragmento no iría en el texto final.</span></label></li>
+<li><label><input data-ptask="4" type="checkbox"/> <span>Verifica cada dato resaltado en la fuente y marca "verificado" o "corregido", con el valor correcto cuando corresponda. Está listo cuando cada dato resaltado tenga al lado una de esas dos palabras y sepas cuántos acertó la IA y cuántos no.</span></label></li>
+</ol>
+<p class="pdone">Acabas de hacer en diez minutos lo que evita la mayoría de las correcciones incómodas. A partir de ahora, todo texto de la IA pasa por esta revisión antes de salir: número, plazo, promesa.</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; dois cartões de resposta com a mesma forma, o mesmo tamanho e a mesma frase redonda: um está certo (verde) e o outro errado (âmbar), e nada na cara deles diz qual é qual. A conferência é o único jeito de saber." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<text fill="#948DA6" font-family="monospace" font-size="9" x="14" y="20">misma apariencia, misma seguridad</text>
+<rect fill="#1a1824" height="120" rx="8" stroke="#948DA6" stroke-width="1.5" width="90" x="14" y="34"></rect>
+<rect fill="#1a1824" height="120" rx="8" stroke="#948DA6" stroke-width="1.5" width="90" x="116" y="34"></rect>
+<path d="M26 54 h66 M26 68 h50 M26 82 h60 M26 96 h40 M26 110 h58 M26 124 h30" opacity=".7" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M128 54 h66 M128 68 h50 M128 82 h60 M128 96 h40 M128 110 h58 M128 124 h30" opacity=".7" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<rect fill="#7CE0C6" height="8" rx="2" width="22" x="70" y="92"></rect>
+<rect fill="#F2B45C" height="8" rx="2" width="22" x="172" y="92"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="9" x="40" y="176">correcto</text>
+<text fill="#F2B45C" font-family="monospace" font-size="9" x="140" y="176">incorrecto</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="14" y="194">sin revisar, no se puede ver</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; um texto com três trechos destacados e uma lupa sobre cada um: número, prazo e promessa. O resto do texto passa sem lupa. Só esses três precisam de fonte antes de sair." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#1a1824" height="172" rx="8" stroke="#2A2637" stroke-width="1.5" width="192" x="14" y="14"></rect>
+<path d="M28 34 h120 M28 48 h160" opacity=".5" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<rect fill="#F2B45C" height="10" opacity=".85" rx="2" width="44" x="28" y="60"></rect>
+<path d="M80 65 h100" opacity=".5" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M28 84 h60" opacity=".5" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<rect fill="#F2B45C" height="10" opacity=".85" rx="2" width="56" x="96" y="79"></rect>
+<path d="M28 102 h150 M28 116 h90" opacity=".5" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<rect fill="#F2B45C" height="10" opacity=".85" rx="2" width="70" x="28" y="128"></rect>
+<path d="M106 133 h60" opacity=".5" stroke="#948DA6" stroke-linecap="round" stroke-width="2.5"></path>
+<g fill="none" stroke="#7CE0C6" stroke-width="2.5"><circle cx="58" cy="65" r="12"></circle><path d="M67 74 l8 8"></path><circle cx="130" cy="84" r="12"></circle><path d="M139 93 l8 8"></path><circle cx="70" cy="133" r="12"></circle><path d="M79 142 l8 8"></path></g>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="28" y="164">número · plazo · promesa</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="28" y="178">cada uno con su fuente</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; um formulário de pedido com os campos que identificam uma pessoa cobertos por tarjas: nome, documento, telefone, valor da conta. Os campos abertos (verde) são os que a IA precisa de verdade: papel da pessoa, situação, tom." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#ECE6D9" height="172" opacity=".92" rx="8" width="180" x="20" y="14"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="9" opacity=".7" x="34" y="36">solicitud para el chat</text>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="58">nombre</text>
+<rect fill="#0E0D14" height="11" rx="2" width="100" x="80" y="50"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="78">documento</text>
+<rect fill="#0E0D14" height="11" rx="2" width="80" x="100" y="70"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="98">teléfono</text>
+<rect fill="#0E0D14" height="11" rx="2" width="88" x="92" y="90"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="124">quién es</text>
+<rect fill="#7CE0C6" height="11" opacity=".8" rx="2" width="100" x="80" y="116"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="144">situación</text>
+<rect fill="#7CE0C6" height="11" opacity=".8" rx="2" width="88" x="92" y="136"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="164">tono</text>
+<rect fill="#7CE0C6" height="11" opacity=".8" rx="2" width="114" x="66" y="156"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="8" opacity=".6" x="34" y="182">franja = no se incluye · verde = lo que usa la IA</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a mesma dúvida feita de dois jeitos. À esquerda, 'está certo?' recebe um sim ou um não igualmente confiantes (âmbar). À direita, 'como eu confiro?' recebe um caminho de três passos (verde) que você mesmo percorre." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#1a1824" height="172" rx="8" stroke="#2A2637" stroke-width="1.5" width="94" x="12" y="14"></rect>
+<rect fill="#1a1824" height="172" rx="8" stroke="#2A2637" stroke-width="1.5" width="94" x="114" y="14"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="22" y="34">¿está bien?</text>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="124" y="34">¿cómo lo reviso?</text>
+<path d="M59 42 v22" stroke="#948DA6" stroke-width="2"></path>
+<rect fill="#F2B45C" height="20" opacity=".9" rx="5" width="30" x="24" y="66"></rect>
+<rect fill="#F2B45C" height="20" opacity=".9" rx="5" width="30" x="64" y="66"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="30" y="80">sí</text>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="70" y="80">no</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="22" y="110">misma seguridad</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="22" y="122">en ambos lados</text>
+<path d="M161 42 v14" stroke="#948DA6" stroke-width="2"></path>
+<rect fill="#221f2e" height="22" rx="5" stroke="#7CE0C6" stroke-width="1.5" width="74" x="124" y="58"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="8" x="130" y="72">1 · qué sería</text>
+<path d="M161 80 v10" stroke="#7CE0C6" stroke-width="2"></path>
+<rect fill="#221f2e" height="22" rx="5" stroke="#7CE0C6" stroke-width="1.5" width="74" x="124" y="90"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="8" x="130" y="104">2 · dónde mirar</text>
+<path d="M161 112 v10" stroke="#7CE0C6" stroke-width="2"></path>
+<rect fill="#221f2e" height="22" rx="5" stroke="#7CE0C6" stroke-width="1.5" width="74" x="124" y="122"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="8" x="130" y="136">3 · qué cambia</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="124" y="166">tú recorres,</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="124" y="178">tú decides</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>La IA arma la frase más probable, no la verificada. Por eso escribe tan bien y por eso se equivoca sin cambiar de tono.</li>
+<li>Solo hay que comprobar tres tipos de fragmentos antes de enviar: números, plazos y promesas. El resto puede salir sin revisarlo con lupa.</li>
+<li>Cada uno de estos tres tiene una fuente fuera del chat. Si no sabes cuál es la fuente, ese fragmento no va en el texto.</li>
+<li>Los datos reales de una persona nunca se incluyen en el chat. "Paciente A" y un valor inventado dan el mismo resultado, y los cambias justo antes de enviar.</li>
+<li>Preguntar "¿está bien?" no sirve. Pedir "¿cómo puedo verificarlo en cinco minutos?" te da un método que puedes seguir por tu cuenta.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu próximo paso</p>
+<p class="na-win">Acabas de revisar un texto de la IA con los tres criterios y sabes cuántos acertó.</p>
+<p class="na-action">En los próximos 15 minutos, abre el último texto que le reenviaste a alguien sin verificarlo, aunque no lo haya escrito una IA. Resalta los números, los plazos y las promesas. Si encuentras algo "sin fuente", ya sabes qué hacer la próxima vez.</p>
+<p class="na-hook">En la última clase reúnes todo en tu propio kit: cinco solicitudes con tu contexto ya completado, guardadas en un archivo, para no volver a escribir nada la semana que viene.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#aula-2">← clase anterior</a><a href="#aula-4">próxima clase →</a></nav>
+<footer>Clase 3 · INEMA.CLUB PRO</footer>
+<script id="cards-3" type="application/json">
+[
+  {"front":"A IA devolveu um aviso para clientes com a frase \"o reajuste será de 8% a partir de março\". Você não deu nem o percentual nem o mês. Antes de enviar, o que você faz com cada um dos dois?","back":"Os dois são dos três que se conferem: 8% é número, março é prazo. Cada um vai para a fonte (o contrato, a planilha de preços, a pessoa que decidiu). Se algum não tiver fonte, sai do texto. Nunca perguntar à própria IA se está certo."},
+  {"front":"Qual é a diferença entre perguntar \"isso está certo?\" e perguntar \"como eu confiro isso em cinco minutos?\" para a IA?","back":"A primeira devolve um sim ou um não com a mesma segurança nos dois casos, porque a IA não tem a fonte. A segunda devolve um caminho (o que precisaria ser verdade, onde olhar, o que muda) que você percorre sozinho, e o veredito fica com você."},
+  {"front":"Uma recepcionista quer testar uma mensagem de cobrança no chat e cola o nome, o telefone e o valor em aberto de uma cliente. O que está errado e como ela faz o mesmo teste sem isso?","back":"Dado real de pessoa saiu da empresa para um serviço de fora. Ela testa com \"cliente A\", um telefone inventado e um valor redondo; o texto sai igual. O nome e o valor verdadeiros entram só na hora de enviar, fora do chat."},
+  {"front":"Você tem quinze minutos e um texto de duas páginas escrito pela IA. Não dá para conferir tudo. O que você confere e o que deixa passar?","back":"Confere só número, prazo e promessa em nome da empresa: são os trechos que geram cobrança se estiverem errados. Adjetivos, ordem das frases e estilo passam sem lupa. Três tipos, cada um com fonte, cabe em cinco minutos."},
+  {"front":"Um texto da IA veio sem nenhum número, sem data e sem promessa. Ele ainda pode estar errado. Por que mesmo assim ele não precisa da conferência dos três, e o que você faz com ele?","back":"Porque o risco que a conferência cobre é o de alguém cobrar um valor, uma data ou um compromisso. Sem esses trechos, o pior caso é um texto ruim, não uma reclamação. Você lê como leria qualquer rascunho, ajusta o tom e usa."}
+]
+</script>
+<!-- COMPLETUDE aula-3 | tipo=FUNDAMENTO | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="18min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Renata, Marta+Paulo, Beatriz, Paulo)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="tarefa"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~10 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1)
+  [OK] cards              <script id="cards-3"> presente (5 cartões: aplicação, contraste, diagnóstico, decisão, pergunta)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [OK] teste-se-FUND      tipo=FUNDAMENTO: presente (1 quiz data-fb, step 04)
+  dosagem: pool = quiz + cartões + qbefore-after (step 02) + qanchor (step 04) = 4 obrigatórios, 0 opcionais (teto 5). densidade: 2 quadros funcionais em 4 steps, não adjacentes. gterm: chat de IA, fonte.
+-->
+</section>
+<!-- ===== AULA 4 · PRÁTICA ===== -->
+<section class="view" data-aula="4" data-tempo="20min" id="v-aula-4">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Ruta única · Clase 4</p>
+<h1>Tu kit:<br/><em>cinco pedidos tuyos</em></h1>
+<p class="promise">Al terminar esta clase podrás armar tu kit con cinco pedidos completados con tu contexto, probar uno en un chat y guardar el archivo para usarlo todas las semanas.</p>
+<p class="why">En las tres clases anteriores aprendiste a hacer solicitudes con las tres partes, a usar el chat sin miedo y a verificar antes de reenviar. Falta lo que hace que esto dure: dejar de escribir todo de nuevo cada lunes. El kit publicado tiene veinte solicitudes, y veinte son demasiadas para que una persona las use. Esta clase es para que elijas las cinco tuyas, las completes una vez y las guardes en un lugar que abras sin pensarlo.</p>
+<p class="cue"><span class="arw">↓</span> desplázate para estudiar</p>
+</div>
+<!-- herofig · registro METÁFORA-DO-MUNDO-REAL: uma caixinha de fichas de receita, com cinco fichas escolhidas viradas para a frente, abas coloridas -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<ellipse cx="150" cy="214" fill="#000" opacity=".25" rx="112" ry="9"></ellipse>
+<path d="M50 120 h200 v86 a6 6 0 0 1 -6 6 h-188 a6 6 0 0 1 -6 -6 z" fill="#1a1824" stroke="#948DA6" stroke-width="2"></path>
+<path d="M50 120 l14 -16 h172 l14 16" fill="#221f2e" stroke="#948DA6" stroke-width="2"></path>
+<g opacity=".45">
+<rect fill="#ECE6D9" height="110" rx="3" width="150" x="70" y="92"></rect>
+<rect fill="#ECE6D9" height="110" rx="3" width="150" x="76" y="86"></rect>
+<rect fill="#ECE6D9" height="110" rx="3" width="150" x="82" y="80"></rect>
+</g>
+<g transform="rotate(-4 160 140)">
+<rect fill="#ECE6D9" height="112" opacity=".96" rx="3" width="150" x="90" y="70"></rect>
+<rect fill="#7CE0C6" height="12" rx="2" width="34" x="90" y="70"></rect>
+<path d="M104 100 h108 M104 114 h92 M104 128 h100 M104 142 h70" opacity=".55" stroke="#0E0D14" stroke-linecap="round" stroke-width="2.2"></path>
+<path d="M104 160 h44" stroke="#F2B45C" stroke-linecap="round" stroke-width="3"></path>
+</g>
+<g>
+<rect fill="#7CE0C6" height="10" rx="2" width="18" x="140" y="62"></rect>
+<rect fill="#F2B45C" height="10" rx="2" width="18" x="164" y="60"></rect>
+<rect fill="#7CE0C6" height="10" rx="2" width="18" x="188" y="58"></rect>
+<rect fill="#F2B45C" height="10" rx="2" width="18" x="212" y="56"></rect>
+</g>
+<text fill="#948DA6" font-family="monospace" font-size="9" transform="rotate(-90 64 150)" x="64" y="150">20 fichas</text>
+<text fill="#7CE0C6" font-family="monospace" font-size="9" transform="rotate(-90 252 150)" x="252" y="150">5 elegidas</text>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> Beatriz, del primer mensaje al primer kit</h2>
+<p>Vale la pena unir las tres clases en una sola historia, porque así es como cobran sentido. Beatriz es dueña de una clínica de fisioterapia con seis profesionales y unos trescientos pacientes activos. Nunca había usado un <span class="gterm" data-def="O site ou aplicativo onde você escreve e a IA responde, como ChatGPT, Claude, Gemini ou Copilot. As versões gratuitas servem para tudo o que este curso ensina." tabindex="0">chat de IA</span> para el trabajo.</p>
+<!-- ex-prof --><p>En la clase 1, su primera solicitud tuvo cuatro palabras: "mensaje para confirmar consulta", y recibió un texto que parecía de un banco. Agregó las tres partes —quién es, qué resultado quiere y qué no puede pasar— y el mensaje quedó en tres líneas con una pregunta al final. En la clase 2, descubrió los cuatro botones y pidió tres versiones antes de elegir una. En la clase 3, cambió el nombre de la paciente por "paciente A" y verificó el horario en la agenda antes de enviar. Funcionó, y entonces apareció un nuevo problema: todos los lunes abría el chat y escribía toda la solicitud de nuevo, desde cero.</p>
+<p>Es en este punto donde la mayoría de las personas deja de usarla. No porque la IA haya fallado, sino porque pedir bien requiere trabajo, y el trabajo que se repite sin volverse más fácil termina abandonándose. La respuesta no es memorizar. Es guardar. Lo que Beatriz necesita, y lo que vas a crear en esta clase, es un <span class="gterm" data-def="Um arquivo simples com os seus pedidos já preenchidos com o seu contexto, para copiar e colar em vez de escrever de novo. Um por situação que se repete no seu trabalho." tabindex="0">kit</span>: cinco solicitudes con su contexto ya incluido, en un archivo que ella puede abrir y copiar.</p>
+<p>Fíjate en el tamaño del salto. Beatriz no necesita entender nada más sobre la IA para dar este paso. Solo necesita elegir, completar y guardar. Todo lo que aprendió en las tres clases sigue siendo útil; la diferencia es que ahora sirve sin tener que repetirlo.</p>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="fundamento">
+<h2><span class="n">02</span> Cinco, no veinte</h2>
+<p>El kit publicado tiene veinte solicitudes, y es a propósito: veinte situaciones diferentes para que identifiques las tuyas. Pero un archivo con veinte solicitudes guardadas es un archivo que nadie abre. Quien guarda todo no usa nada. En la práctica, el número que funciona es cinco, y el criterio para elegir es uno solo: ¿la situación se repite todas las semanas?</p>
+<p>Piensa en lo que haces el lunes por la mañana y el viernes por la tarde. Los mensajes que siempre hay que enviar, el texto que siempre se atasca, la verificación que siempre se retrasa. Ahí es donde un pedido guardado compensa el esfuerzo de haberlo completado. Una situación que aparece una vez al año no merece una ficha; cuando llegue, abres el kit publicado.</p>
+<!-- ex-prof --><p>Paulo coordina el marketing de cuatro tiendas de materiales de construcción. Cuando revisó los veinte pedidos, marcó once como "útiles". Cuando se preguntó cuáles usaría todas las semanas, quedaron cuatro: la publicación sobre la novedad de la semana, las tres versiones de un título, la comparación entre dos ideas de campaña y la verificación de un precio antes de publicar. Dejó el quinto pendiente y, un mes después, agregó el pedido de resumir la reunión del lunes con los gerentes de las tiendas.</p>
+<div class="qapply">
+<p class="qak">En tu profesión, las cinco solicitudes más probables para el kit suelen ser</p>
+<ul>
+<li><b>Gerente de RR. HH.:</b> comunicado para el equipo (3), explicar una cláusula en lenguaje sencillo (6), organizar la semana (9), agenda de reunión con decisión (10) y mejorar un texto tuyo (4).</li>
+<li><b>Dueña de clínica:</b> mensaje corto para un paciente (2), responder una queja (14), describir un servicio para alguien sin conocimientos del tema (15), hoja de cálculo desde cero (8) y corregir el tono (20).</li>
+<li><b>Coordinador de marketing:</b> publicación sobre una novedad (16), tres versiones (19), comparar dos opciones (11), comprobar un número antes de compartirlo (13) y las preguntas antes de cerrar un acuerdo con un proveedor (12).</li>
+<li><b>Gerente de atención al cliente:</b> traducir algo técnico para el cliente (7), responder una queja (14), resumir un documento largo (5), correo electrónico difícil (1) y hacer que la IA pregunte antes (17).</li>
+</ul>
+</div>
+<p>La lista de arriba es un punto de partida, no una prueba. Si tu quinto pedido es distinto del sugerido, significa que conoces tu trabajo mejor que una lista. Anota los cinco números antes de pasar al siguiente paso.</p>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="fundamento">
+<h2><span class="n">03</span> Complétalo una vez, úsalo todas las semanas</h2>
+<p>Todos los pedidos del kit tienen partes entre los signos menor y mayor, como "quién eres" o "tu tono con los clientes". En el kit, quedan abiertas porque la página es para todos. En tu archivo, las completas porque el archivo es solo tuyo. Esa es toda la diferencia entre el kit publicado y el tuyo.</p>
+<p>Separa las partes en dos tipos. Las fijas son las que no cambian de una semana a otra: quién eres, el tamaño de tu equipo, tu tono y quiénes son tus clientes. Las variables son los detalles de cada ocasión: el nombre del producto de la semana, el plazo de esta vez y lo que pasó hoy. Completa las fijas una vez y no vuelvas a tocarlas. Deja las variables marcadas para cambiarlas en diez segundos.</p>
+<!-- ex-prof --><p>Marta, de RR. HH. en una fábrica con ciento veinte empleados, completó así la solicitud del comunicado: "Soy gerente de RR. HH. de una fábrica de envases con 120 empleados, la mayoría trabaja en planta, y escribo comunicados breves y directos, sin 'estimados colaboradores'". Eso es fijo y nunca volvió a escribirlo. Lo que cambia, el cambio de regla y el plazo, sigue entre los signos. La semana siguiente, el comunicado sobre el nuevo horario del comedor le tomó cuatro minutos, tres de ellos de lectura.</p>
+<p>Una precaución de la clase 3 se aplica aquí el doble: la información fija puede incluir tu nombre y el de tu empresa, pero nunca el nombre, el documento ni el teléfono de un cliente o paciente. El kit es tuyo; los datos de los demás no. Si un pedido necesita un ejemplo de cliente, escribe "Cliente A" en el archivo y déjalo así para siempre.</p>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="ferramenta" data-versao="bloco de notas do celular ou do computador, set/2026">
+<h2><span class="n">04</span> Dónde guardarlo y la rutina del lunes</h2>
+<p>El lugar adecuado para el kit es el más sencillo que ya usas: la aplicación de notas del celular, un archivo de texto en la computadora o una nota en la aplicación para tomar apuntes. Nada de programas nuevos. El criterio es uno solo: que lo abras en dos toques, sin tener que buscarlo. Ponle un nombre que reconozcas, como "mis solicitudes", y agrega la fecha al final del archivo para saber cuándo lo revisaste por última vez.</p>
+<p>Esto parece algo técnico, pero funciona como la carpeta de modelos de cartas que toda oficina tuvo alguna vez: cada modelo ya tiene escritos los campos que no cambian y deja un espacio en blanco para lo que sí cambia. Abres la carpeta, eliges el modelo correcto, completas el espacio y lo envías. La única diferencia es que aquí el modelo va al chat y no a la impresora. Solo modificas las partes marcadas.</p>
+<!-- ex-prof --><p>Renata, gerente de atención al cliente de una empresa con ochocientos clientes, guardó los cinco pedidos en una nota del celular llamada "pedidos-renata". Su rutina del lunes por la mañana, antes del primer caso, toma menos de diez minutos: abre la nota, copia el pedido para traducir la explicación técnica, lo pega en el chat junto con el texto del técnico, cambia el nombre del sistema, comprueba que no haya aparecido ningún plazo nuevo y lo envía. Cuando un pedido funciona de una manera nueva, pega la nueva versión en la nota, reemplazando la anterior.</p>
+<div class="qsteps">
+<p class="qsk">La rutina semanal, de principio a fin</p>
+<ol>
+<li><b>Abre el archivo</b> antes de abrir el chat, para empezar por el pedido y no por la pantalla en blanco.</li>
+<li><b>Copia el pedido de la situación</b> que está frente a ti, completo, y pégalo en una conversación nueva.</li>
+<li><b>Reemplaza solo las partes marcadas</b>: el detalle de esta semana, nunca la parte fija.</li>
+<li><b>Lee la respuesta y ajústala en la misma conversación</b> si el tono o la extensión quedaron mal, con una frase.</li>
+<li><b>Verifica los tres</b>: número, plazo y promesa, en la fuente, antes de enviarlos a cualquier persona.</li>
+<li><b>Guarda lo que funcionó</b>: si cambiaste la solicitud y quedó mejor, pega la nueva versión en el archivo, en lugar de la anterior.</li>
+</ol>
+</div>
+<p>El paso seis es lo que hace que el kit mejore con el tiempo en lugar de quedar obsoleto. En dos meses, tus cinco pedidos serán diferentes de los cinco de hoy, y mejores, porque cada semana dejó una corrección. Eso es lo que distingue a quien usa IA de quien la probó una vez.</p>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="tarefa" data-practice="p4">
+<p class="pk">Practica ahora <span class="pcount">0/5 hecho</span></p>
+<h3 class="ph">Arma tu kit y prueba una solicitud</h3>
+<p class="pgoal">En unos 12 minutos, elegir cinco situaciones del kit publicado, guardar los cinco pedidos en un archivo con las partes fijas completadas con tu contexto y probar uno en un chat de IA.</p>
+<p class="psafe">Solo vas a escribir en un archivo tuyo y en una conversación de chat con datos inventados. Nada cambia en tu trabajo, nadie recibe nada y, si un pedido no queda bien, borras la línea y eliges otro. Puedes rehacer el archivo tantas veces como quieras.</p>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> <span>Abre el kit en <a href="https://inematds.github.io/ia-do-zero/guia/#guia" rel="noopener" target="_blank">inematds.github.io/ia-do-zero/guia/</a> y elige cinco pedidos con la pregunta «¿esto se repite todas las semanas?». Anota los cinco números.</span></label></li>
+<li><label><input data-ptask="2" type="checkbox"/> <span>Crea un archivo de texto o una nota en el celular con el nombre "mis pedidos" y la fecha de hoy en la primera línea. Usa el botón de copiar de cada pedido y pega los cinco, uno debajo del otro, con una línea en blanco entre ellos.</span></label></li>
+<li><label><input data-ptask="3" type="checkbox"/> <span>En cada pedido, completa las partes fijas con tu contexto: quién eres, el tamaño de tu equipo o negocio, tu tono, quiénes son tus clientes. Deja entre los signos solo lo que cambia cada vez. Está listo cuando ninguna parte fija quede pendiente.</span></label></li>
+<li><label><input data-ptask="4" type="checkbox"/> <span>Elige uno de los cinco, abre una conversación nueva en el chat, pégalo, cambia la parte variable por un caso inventado (cliente A, producto de ejemplo) y lee la respuesta. Si el tono salió mal, ajústalo con una frase en la misma conversación.</span></label></li>
+<li><label><input data-ptask="5" type="checkbox"/> <span>Si el ajuste mejoró el pedido, pega la nueva versión en el archivo, reemplazando la anterior. Comprueba que no haya nombres reales de clientes en ninguna línea. El kit está listo cuando el archivo tiene cinco pedidos con las partes fijas completadas y ya probaste uno de ellos.</span></label></li>
+</ol>
+<p class="pdone">Acabas de armar tu propio kit, con tu contexto incluido, y comprobaste que funciona con un pedido real. El próximo lunes, abres el archivo en vez de abrir la pantalla en blanco.</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; as três folhas de cima são as aulas 1, 2 e 3 (as três partes, os quatro botões, a conferência); as setas convergem numa única ficha embaixo, que é o kit: o mesmo conteúdo, guardado para não ser digitado de novo." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#221f2e" height="44" rx="4" stroke="#948DA6" stroke-width="1.5" width="56" x="14" y="18"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="20" y="34">clase 1</text>
+<path d="M20 44 h34 M20 52 h26" stroke="#948DA6" stroke-linecap="round" stroke-width="2"></path>
+<rect fill="#221f2e" height="44" rx="4" stroke="#948DA6" stroke-width="1.5" width="56" x="82" y="18"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="88" y="34">clase 2</text>
+<rect fill="#7CE0C6" height="8" rx="2" width="8" x="88" y="42"></rect><rect fill="#7CE0C6" height="8" rx="2" width="8" x="100" y="42"></rect><rect fill="#7CE0C6" height="8" rx="2" width="8" x="112" y="42"></rect><rect fill="#7CE0C6" height="8" rx="2" width="8" x="124" y="42"></rect>
+<rect fill="#221f2e" height="44" rx="4" stroke="#948DA6" stroke-width="1.5" width="56" x="150" y="18"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="9" x="156" y="34">clase 3</text>
+<circle cx="162" cy="48" r="5" stroke="#F2B45C" stroke-width="2"></circle><circle cx="178" cy="48" r="5" stroke="#F2B45C" stroke-width="2"></circle><circle cx="194" cy="48" r="5" stroke="#F2B45C" stroke-width="2"></circle>
+<path d="M42 66 q0 40 68 52" fill="none" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M110 66 v52" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M178 66 q0 40 -68 52" fill="none" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M106 114 l4 6 l4 -6" fill="none" stroke="#7CE0C6" stroke-width="1.5"></path>
+<rect fill="#ECE6D9" height="58" opacity=".92" rx="5" width="100" x="60" y="124"></rect>
+<rect fill="#7CE0C6" height="10" rx="2" width="28" x="60" y="124"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="68" y="150">tu kit</text>
+<path d="M68 160 h70 M68 170 h50" opacity=".5" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; vinte fichas, quinze apagadas e cinco acesas (verde): as acesas são as situações que se repetem toda semana. Um kit com as vinte não é aberto; um kit com as cinco é." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<g fill="#1a1824" stroke="#37324a" stroke-width="1.5">
+<rect height="24" rx="3" width="32" x="14" y="22"></rect><rect height="24" rx="3" width="32" x="54" y="22"></rect><rect height="24" rx="3" width="32" x="94" y="22"></rect><rect height="24" rx="3" width="32" x="134" y="22"></rect><rect height="24" rx="3" width="32" x="174" y="22"></rect>
+<rect height="24" rx="3" width="32" x="14" y="56"></rect><rect height="24" rx="3" width="32" x="54" y="56"></rect><rect height="24" rx="3" width="32" x="94" y="56"></rect><rect height="24" rx="3" width="32" x="134" y="56"></rect><rect height="24" rx="3" width="32" x="174" y="56"></rect>
+<rect height="24" rx="3" width="32" x="14" y="90"></rect><rect height="24" rx="3" width="32" x="54" y="90"></rect><rect height="24" rx="3" width="32" x="94" y="90"></rect><rect height="24" rx="3" width="32" x="134" y="90"></rect><rect height="24" rx="3" width="32" x="174" y="90"></rect>
+<rect height="24" rx="3" width="32" x="14" y="124"></rect><rect height="24" rx="3" width="32" x="54" y="124"></rect><rect height="24" rx="3" width="32" x="94" y="124"></rect><rect height="24" rx="3" width="32" x="134" y="124"></rect><rect height="24" rx="3" width="32" x="174" y="124"></rect>
+</g>
+<g fill="#221f2e" stroke="#7CE0C6" stroke-width="2">
+<rect height="24" rx="3" width="32" x="54" y="22"></rect><rect height="24" rx="3" width="32" x="134" y="56"></rect><rect height="24" rx="3" width="32" x="14" y="90"></rect><rect height="24" rx="3" width="32" x="94" y="90"></rect><rect height="24" rx="3" width="32" x="174" y="124"></rect>
+</g>
+<g fill="#7CE0C6" font-family="monospace" font-size="9">
+<text x="63" y="38">2</text><text x="141" y="72">14</text><text x="21" y="106">15</text><text x="103" y="106">8</text><text x="181" y="140">20</text>
+</g>
+<text fill="#948DA6" font-family="monospace" font-size="9" x="14" y="176">criterio: ¿se repite todas las semanas?</text>
+<text fill="#7CE0C6" font-family="monospace" font-size="9" x="14" y="190">5 activas · 15 quedan en el kit publicado</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; uma ficha com os campos fixos já preenchidos (verde: quem você é, seu tom, seus clientes) e um único campo variável em aberto (âmbar: o detalhe desta semana). Você preenche o verde uma vez e troca só o âmbar." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#ECE6D9" height="166" opacity=".94" rx="6" width="172" x="24" y="18"></rect>
+<rect fill="#7CE0C6" height="12" rx="2" width="40" x="24" y="18"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="36" y="48">quién soy</text>
+<rect fill="#7CE0C6" height="14" opacity=".55" rx="3" width="148" x="36" y="52"></rect>
+<path d="M42 59 h100" opacity=".6" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="36" y="84">mi tono</text>
+<rect fill="#7CE0C6" height="14" opacity=".55" rx="3" width="148" x="36" y="88"></rect>
+<path d="M42 95 h70" opacity=".6" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="36" y="120">mis clientes</text>
+<rect fill="#7CE0C6" height="14" opacity=".55" rx="3" width="148" x="36" y="124"></rect>
+<path d="M42 131 h88" opacity=".6" stroke="#0E0D14" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E0D14" font-family="monospace" font-size="9" x="36" y="156">el detalle de esta semana</text>
+<rect fill="none" height="14" rx="3" stroke="#F2B45C" stroke-dasharray="4 3" stroke-width="2" width="148" x="36" y="160"></rect>
+<text fill="#F2B45C" font-family="monospace" font-size="9" x="44" y="171">&lt; cambia aquí &gt;</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a rotina de segunda como um ciclo: abrir o arquivo, colar, trocar a parte marcada, conferir os três (número, prazo, promessa), enviar, e guardar o que deu certo de volta no arquivo. O último passo é o que faz o kit melhorar em vez de envelhecer." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<circle cx="110" cy="100" r="66" stroke="#37324a" stroke-dasharray="5 4" stroke-width="2"></circle>
+<g font-family="monospace" font-size="9">
+<rect fill="#221f2e" height="20" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="52" x="84" y="18"></rect><text fill="#ECE6D9" x="92" y="31">1 abrir</text>
+<rect fill="#221f2e" height="20" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="52" x="150" y="52"></rect><text fill="#ECE6D9" x="158" y="65">2 pegar</text>
+<rect fill="#221f2e" height="20" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="52" x="150" y="126"></rect><text fill="#ECE6D9" x="156" y="139">3 cambiar</text>
+<rect fill="#221f2e" height="20" rx="4" stroke="#F2B45C" stroke-width="1.5" width="56" x="84" y="162"></rect><text fill="#ECE6D9" x="88" y="175">4 verificar</text>
+<rect fill="#221f2e" height="20" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="52" x="18" y="126"></rect><text fill="#ECE6D9" x="24" y="139">5 enviar</text>
+<rect fill="#221f2e" height="20" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="60" x="14" y="52"></rect><text fill="#ECE6D9" x="18" y="65">6 guardar</text>
+</g>
+<path d="M140 34 l10 14" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M176 74 v50" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M150 150 l-12 12" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M82 170 l-14 -22" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M44 124 v-50" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M76 52 l8 -14" stroke="#7CE0C6" stroke-width="1.5"></path>
+<path d="M46 78 l-4 -6 l6 -1" fill="none" stroke="#7CE0C6" stroke-width="1.5"></path>
+<text fill="#948DA6" font-family="monospace" font-size="9" x="86" y="104">todos los lunes</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>Lo que hace que la IA perdure en tu trabajo no es saber más sobre ella. Es dejar de escribir todo de nuevo cada semana.</li>
+<li>El kit publicado tiene veinte solicitudes para que identifiques las cinco tuyas. El criterio es si la situación se repite todas las semanas.</li>
+<li>Las partes fijas, quién eres, tu tono y tus clientes, las completas una vez. Las variables quedan marcadas para cambiarlas en segundos.</li>
+<li>El lugar del kit es la aplicación de notas que ya abres sin pensarlo. Nada de programas nuevos ni nombres reales de clientes.</li>
+<li>La rutina termina guardando lo que funcionó de vuelta en el archivo. Eso es lo que hace que los cinco pedidos mejoren en lugar de quedarse obsoletos.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu próximo paso</p>
+<p class="na-win">Acabas de armar un kit con tu contexto incluido y probaste con él un pedido real.</p>
+<p class="na-action">En los próximos 15 minutos, envíate el archivo por correo electrónico o WhatsApp para tenerlo en el celular y en la computadora. Así el lunes empieza con el kit abierto, estés donde estés.</p>
+<p class="na-hook">El curso termina aquí y tu rutina empieza el lunes: abre el archivo, pega una solicitud, cambia una palabra, verifica lo que haga falta y envíalo. El kit completo, con las 20 solicitudes, sigue en <a href="https://inematds.github.io/ia-do-zero/guia/" rel="noopener" target="_blank">inematds.github.io/ia-do-zero/guia/</a>.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#aula-3">← clase anterior</a><a href="#trilha">completar ✓ →</a></nav>
+<footer>Clase 4 · INEMA.CLUB PRO</footer>
+<script id="cards-4" type="application/json">
+[
+  {"front":"Você marcou onze pedidos do kit como úteis para o seu trabalho. Quais entram no seu arquivo, e com que pergunta você decide?","back":"Só os que respondem sim a 'isto se repete toda semana?', até chegar a cinco. Os outros ficam no kit publicado, para abrir quando a situação rara aparecer."},
+  {"front":"Num pedido guardado, a frase 'sou gerente de atendimento de uma empresa com 800 clientes' e a frase 'o cliente reclamou do atraso de ontem' são do mesmo tipo? O que você faz com cada uma?","back":"Não. A primeira é fixa: preenche uma vez e nunca mais toca. A segunda é variável: fica marcada entre os sinais e você troca a cada uso."},
+  {"front":"Depois de ajustar um pedido no chat, a resposta saiu melhor do que com a versão do arquivo. O que você faz antes de fechar a conversa, e por quê?","back":"Cola a versão nova no arquivo, por cima da antiga. Sem esse passo o kit envelhece; com ele, cada semana deixa uma correção e os cinco pedidos melhoram com o tempo."}
+]
+</script>
+<!-- COMPLETUDE aula-4 | tipo=PRATICA | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="20min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Beatriz, Paulo + qapply com as 4, Marta, Renata)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="tarefa"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1; arquivo próprio + dados inventados, nada enviado)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~12 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1; na-hook = fecho de trilha, aponta pro kit)
+  [OK] cards              <script id="cards-4"> presente (3 cartões de aplicação/decisão/contraste; decisão: aula PRÁTICA sem cartões obrigatórios, 3 integradores)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [N/A] teste-se-FUND     aula é PRÁTICA/INTEGRAÇÃO (obrigação não se aplica); sem teste-se opcional
+  dosagem: pool = qsteps (step 04) + mini-caso integrador (prosa, step 01: Beatriz da aula 1 à 3) obrigatórios + qapply opcional (step 02, 4 profissões com números do kit) = 3 (teto 5). densidade: 2 quadros funcionais em 4 steps (02 e 04), não adjacentes. data-versao no step 04 (ferramenta). rampa de acesso antes do bloco de rotina ("pasta de modelos de carta do escritório").
+-->
+</section>
+<script src="../assets/curso.js"></script>
+</body>
+</html>
