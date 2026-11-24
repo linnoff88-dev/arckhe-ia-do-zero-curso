@@ -1,4 +1,4 @@
-﻿# IA do Zero (curso)
+# IA do Zero (curso)
 
 <div align="center">
   <img src="capa/logo.svg" alt="Arckhé AI" height="48" />
@@ -7,10 +7,10 @@
 
 
 **Os primeiros pedidos de quem nunca usou IA, com o porquÃª de cada um.**
-Curso INEMA.CLUB PRO no formato v5 (pÃ¡gina Ãºnica, dark editorial, pÃºblico 40+ leigo), em 4 aulas curtas, companheiro do kit
-[IA do Zero](https://inematds.github.io/ia-do-zero/guia/) (20 pedidos por situaÃ§Ã£o + 10 dicas).
+Curso ARCKHÉ AI PRO no formato v5 (pÃ¡gina Ãºnica, dark editorial, pÃºblico 40+ leigo), em 4 aulas curtas, companheiro do kit
+[IA do Zero](https://linnoff88-dev.github.io/ (20 pedidos por situaÃ§Ã£o + 10 dicas).
 
-- PÃ¡gina: https://inematds.github.io/ia-do-zero-curso/
+- PÃ¡gina: https://linnoff88-dev.github.io/
 - Landing: `landing.html` Â· Curso: `curso.html` (trilha + 4 aulas como views, roteamento por hash)
 - Capa: `capa/capa.png`
 
